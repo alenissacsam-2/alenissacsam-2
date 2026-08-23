@@ -43,7 +43,8 @@
     <rect x="30" y="96" width="3" height="80" rx="1.5" fill="#22D3EE"/>
     <text class="m" x="50" y="108" font-size="9.5" letter-spacing="1.6" fill="#3E4C5A">BLOCK #01</text>
     <text class="m" x="50" y="130" font-size="14.5" font-weight="700" fill="#22D3EE">algorand-identity-verification</text>
-    <text class="m" x="50" y="148" font-size="10.5" fill="#7D8590">No description yet.</text>
+    <text class="m" x="50" y="148" font-size="10.5" fill="#7D8590">DID and trust-score system on Algorand with biometric and</text>
+    <text class="m" x="50" y="163" font-size="10.5" fill="#7D8590">document verification</text>
     <circle cx="54" cy="172" r="4" fill="#3178c6"/>
     <text class="m" x="64" y="176" font-size="10.5" fill="#E6EDF3">TypeScript</text>
     <text class="m" x="462" y="176" font-size="10" text-anchor="end" fill="#3E4C5A">updated today</text>
@@ -53,7 +54,8 @@
     <rect x="518" y="96" width="3" height="80" rx="1.5" fill="#22D3EE"/>
     <text class="m" x="538" y="108" font-size="9.5" letter-spacing="1.6" fill="#3E4C5A">BLOCK #02</text>
     <text class="m" x="538" y="130" font-size="14.5" font-weight="700" fill="#22D3EE">blockchain-certificate-verification</text>
-    <text class="m" x="538" y="148" font-size="10.5" fill="#7D8590">No description yet.</text>
+    <text class="m" x="538" y="148" font-size="10.5" fill="#7D8590">On-chain certificate registry: issue, template, batch-issue and</text>
+    <text class="m" x="538" y="163" font-size="10.5" fill="#7D8590">verify credentials</text>
     <circle cx="542" cy="172" r="4" fill="#f1e05a"/>
     <text class="m" x="552" y="176" font-size="10.5" fill="#E6EDF3">JavaScript</text>
     <text class="m" x="950" y="176" font-size="10" text-anchor="end" fill="#3E4C5A">updated today</text>
@@ -63,7 +65,8 @@
     <rect x="30" y="216" width="3" height="80" rx="1.5" fill="#8B5CF6"/>
     <text class="m" x="50" y="228" font-size="9.5" letter-spacing="1.6" fill="#3E4C5A">BLOCK #03</text>
     <text class="m" x="50" y="250" font-size="14.5" font-weight="700" fill="#8B5CF6">ethereum-identity-dapp</text>
-    <text class="m" x="50" y="268" font-size="10.5" fill="#7D8590">No description yet.</text>
+    <text class="m" x="50" y="268" font-size="10.5" fill="#7D8590">Ethereum identity verification with face and voice checks plus</text>
+    <text class="m" x="50" y="283" font-size="10.5" fill="#7D8590">server-side attestation</text>
     <circle cx="54" cy="292" r="4" fill="#3178c6"/>
     <text class="m" x="64" y="296" font-size="10.5" fill="#E6EDF3">TypeScript</text>
     <text class="m" x="462" y="296" font-size="10" text-anchor="end" fill="#3E4C5A">updated today</text>
@@ -73,7 +76,8 @@
     <rect x="518" y="216" width="3" height="80" rx="1.5" fill="#8B5CF6"/>
     <text class="m" x="538" y="228" font-size="9.5" letter-spacing="1.6" fill="#3E4C5A">BLOCK #04</text>
     <text class="m" x="538" y="250" font-size="14.0" font-weight="700" fill="#8B5CF6">AI-Powered-Infrastructure-Design-with-Google-ADK</text>
-    <text class="m" x="538" y="268" font-size="10.5" fill="#7D8590">No description yet.</text>
+    <text class="m" x="538" y="268" font-size="10.5" fill="#7D8590">Multi-agent infrastructure design system built on Google's Agent</text>
+    <text class="m" x="538" y="283" font-size="10.5" fill="#7D8590">Development Kit</text>
     <circle cx="542" cy="292" r="4" fill="#DA5B0B"/>
     <text class="m" x="552" y="296" font-size="10.5" fill="#E6EDF3">Jupyter Notebook</text>
     <text class="m" x="950" y="296" font-size="10" text-anchor="end" fill="#3E4C5A">updated today</text>
@@ -83,7 +87,7 @@
     <rect x="30" y="336" width="3" height="80" rx="1.5" fill="#34D399"/>
     <text class="m" x="50" y="348" font-size="9.5" letter-spacing="1.6" fill="#3E4C5A">BLOCK #05</text>
     <text class="m" x="50" y="370" font-size="14.5" font-weight="700" fill="#34D399">txline-prediction-markets</text>
-    <text class="m" x="50" y="388" font-size="10.5" fill="#7D8590">No description yet.</text>
+    <text class="m" x="50" y="388" font-size="10.5" fill="#7D8590">Prediction market interface for trading on-chain events</text>
     <circle cx="54" cy="412" r="4" fill="#3178c6"/>
     <text class="m" x="64" y="416" font-size="10.5" fill="#E6EDF3">TypeScript</text>
     <text class="m" x="462" y="416" font-size="10" text-anchor="end" fill="#3E4C5A">updated 1mo ago</text>
@@ -93,7 +97,8 @@
     <rect x="518" y="336" width="3" height="80" rx="1.5" fill="#34D399"/>
     <text class="m" x="538" y="348" font-size="9.5" letter-spacing="1.6" fill="#3E4C5A">BLOCK #06</text>
     <text class="m" x="538" y="370" font-size="14.5" font-weight="700" fill="#34D399">NN-From-Scratch-for-MNIST</text>
-    <text class="m" x="538" y="388" font-size="10.5" fill="#7D8590">No description yet.</text>
+    <text class="m" x="538" y="388" font-size="10.5" fill="#7D8590">Neural network built from first principles - backprop by hand,</text>
+    <text class="m" x="538" y="403" font-size="10.5" fill="#7D8590">no ML frameworks</text>
     <circle cx="542" cy="412" r="4" fill="#DA5B0B"/>
     <text class="m" x="552" y="416" font-size="10.5" fill="#E6EDF3">Jupyter Notebook</text>
     <text class="m" x="950" y="416" font-size="10" text-anchor="end" fill="#3E4C5A">updated today</text>
