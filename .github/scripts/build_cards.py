@@ -34,6 +34,40 @@ FEATURED = [
     "NN-From-Scratch-for-MNIST",
 ]
 
+# None of these repos have a description set on GitHub, so the cards had
+# nothing to print. These are the fallback. A description set on GitHub always
+# wins over the entry here - set them upstream and this map stops mattering.
+DESCRIPTIONS = {
+    "algorand-identity-verification":
+        "DID and trust-score system on Algorand with biometric and document verification",
+    "blockchain-certificate-verification":
+        "On-chain certificate registry: issue, template, batch-issue and verify credentials",
+    "ethereum-identity-dapp":
+        "Ethereum identity verification with face and voice checks plus server-side attestation",
+    "AI-Powered-Infrastructure-Design-with-Google-ADK":
+        "Multi-agent infrastructure design system built on Google's Agent Development Kit",
+    "txline-prediction-markets":
+        "Prediction market interface for trading on-chain events",
+    "NN-From-Scratch-for-MNIST":
+        "Neural network built from first principles - backprop by hand, no ML frameworks",
+    "TicketVerse":
+        "NFT ticketing contracts with on-chain transfer rules and resale limits",
+    "Order_Flow_Analyzer-NinjaTrader-Arena":
+        "Real-time order-flow and market-microstructure analysis for NinjaTrader",
+    "Machine-Learning-Models-for-Biological-Data-Analysis":
+        "Classification and regression models applied to biological datasets",
+    "Ernakulam-Coastline-Decadal-Shoreline-Change-Analysis":
+        "Decadal shoreline change detection along the Ernakulam coast from satellite imagery",
+    "AI-Agents-Intensive-Course-with-Google-":
+        "Coursework and notebooks from Google's AI Agents intensive",
+    "Clinic_Flow-For-Small-Clinics":
+        "Appointment and patient-flow management built for small clinics",
+    "Axiom-Clone":
+        "Front-end clone of the Axiom trading terminal",
+    "Learning_Data_Analysis-Python":
+        "Working notebooks from learning data analysis in Python",
+}
+
 # Languages that say nothing useful about the work.
 LANG_SKIP = {"HTML", "CSS", "Makefile", "Dockerfile", "Shell", "Batchfile"}
 
@@ -616,7 +650,7 @@ def render_projects(d: dict, t: dict) -> str:
             nsize -= 0.5
         svg += f'    <text class="m" x="{x + 20}" y="{y + 48}" font-size="{nsize}" font-weight="700" fill="{accent}">{esc(name)}</text>\n'
 
-        desc = repo.get("description") or "No description yet."
+        desc = repo.get("description") or DESCRIPTIONS.get(repo["name"]) or "No description yet."
         for j, line in enumerate(wrap(desc, 10.5, cw - 44, 2, True)):
             svg += f'    <text class="m" x="{x + 20}" y="{y + 66 + j * 15}" font-size="10.5" fill="{t["muted"]}">{esc(line)}</text>\n'
 
