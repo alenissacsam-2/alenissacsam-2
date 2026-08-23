@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 168" width="1000" height="168" role="img" aria-label="Don't trust. Verify.">
+<title>Don't trust. Verify.</title>
+<defs>
+  <linearGradient id="qg" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22D3EE">
+      <animate attributeName="stop-color" values="#22D3EE;#8B5CF6;#22D3EE" dur="8s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="100%" stop-color="#8B5CF6">
+      <animate attributeName="stop-color" values="#8B5CF6;#22D3EE;#8B5CF6" dur="8s" repeatCount="indefinite"/>
+    </stop>
+  </linearGradient>
+  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22D3EE" stop-opacity="0"/>
+    <stop offset="20%" stop-color="#22D3EE" stop-opacity="0.55"/>
+    <stop offset="50%" stop-color="#8B5CF6" stop-opacity="0.8"/>
+    <stop offset="80%" stop-color="#22D3EE" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+  </linearGradient>
+  <clipPath id="fclip"><rect x="1" y="1" width="998" height="166" rx="14"/></clipPath>
+</defs>
+
+<style>
+  .m { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .s { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; }
+  text { text-rendering: geometricPrecision; }
+  @keyframes trace { to { stroke-dashoffset: -1200; } }
+  @keyframes pulse { 0% { r:5; opacity:.9 } 70%,100% { r:13; opacity:0 } }
+  @keyframes rise  { 0% { opacity:0; transform:translateY(8px) } 100% { opacity:1; transform:translateY(0) } }
+  @keyframes blink { 0%,45% { opacity:1 } 50%,95% { opacity:0 } 100% { opacity:1 } }
+  .sig  { stroke-dasharray: 14 10; animation: trace 22s linear infinite; }
+  .dot  { animation: pulse 2.4s ease-out infinite; }
+  .r1   { opacity:0; animation: rise .8s ease-out .12s forwards; }
+  .r2   { opacity:0; animation: rise .8s ease-out .30s forwards; }
+  .r3   { opacity:0; animation: rise .8s ease-out .48s forwards; }
+  .cur  { animation: blink 1.1s steps(1) infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .r1, .r2, .r3 { opacity:1; transform:none; animation:none; }
+    .cur { opacity:1; animation:none; }
+    .sig { animation:none; }
+    .dot { opacity:0; animation:none; }
+  }
+</style>
+
+<rect x="1" y="1" width="998" height="166" rx="14" fill="#080C14" stroke="#1B2635" stroke-width="1.5"/>
+
+<g clip-path="url(#fclip)">
+  <!-- signal trace across the top -->
+  <path class="sig" d="M0 34 H340 l14 -16 l16 32 l14 -16 H620 l12 -10 l14 20 l12 -10 H1000"
+        fill="none" stroke="url(#lg)" stroke-width="1.6" stroke-linecap="round"/>
+
+  <g class="r1">
+    <text class="m" x="500" y="72" font-size="11" letter-spacing="2.6" text-anchor="middle" fill="#3E4C5A">&#187; PHILOSOPHY</text>
+  </g>
+
+  <g class="r2">
+    <text class="s" x="500" y="112" font-size="33" font-weight="800" text-anchor="middle" fill="url(#qg)">Don&#8217;t trust. Verify.</text>
+  </g>
+
+  <g class="r3">
+    <text class="m" x="500" y="136" font-size="12" text-anchor="middle" fill="#7D8590">every system I build asks the same question:
+      <tspan fill="#7DD3FC">can you prove it without asking permission?</tspan></text>
+
+    <circle class="dot" cx="404" cy="156" r="5" fill="#34D399"/>
+    <circle cx="404" cy="156" r="3.5" fill="#34D399"/>
+    <text class="m" x="416" y="160" font-size="10.5" letter-spacing="1.6" fill="#34D399">OPEN TO COLLABORATE</text>
+    <rect class="cur" x="588" y="150" width="7" height="11" fill="#22D3EE"/>
+  </g>
+</g>
+</svg>

@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" width="1000" height="300" role="img" aria-label="Alen Issac Sam - Decentralized Identity, Smart Contracts, AI">
+<title>Alen Issac Sam - identity verification terminal</title>
+<defs>
+  <linearGradient id="nameGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22D3EE">
+      <animate attributeName="stop-color" values="#22D3EE;#8B5CF6;#34D399;#22D3EE" dur="9s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="55%" stop-color="#7DD3FC">
+      <animate attributeName="stop-color" values="#7DD3FC;#22D3EE;#8B5CF6;#7DD3FC" dur="9s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="100%" stop-color="#8B5CF6">
+      <animate attributeName="stop-color" values="#8B5CF6;#34D399;#22D3EE;#8B5CF6" dur="9s" repeatCount="indefinite"/>
+    </stop>
+  </linearGradient>
+
+  <linearGradient id="ruleGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22D3EE"/>
+    <stop offset="60%" stop-color="#8B5CF6"/>
+    <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+  </linearGradient>
+
+  <linearGradient id="barGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#22D3EE"/>
+    <stop offset="50%" stop-color="#38BDF8"/>
+    <stop offset="100%" stop-color="#8B5CF6"/>
+  </linearGradient>
+
+  <linearGradient id="scanGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0"/>
+    <stop offset="45%"  stop-color="#22D3EE" stop-opacity="0.30"/>
+    <stop offset="50%"  stop-color="#A5F3FC" stop-opacity="0.65"/>
+    <stop offset="55%"  stop-color="#22D3EE" stop-opacity="0.30"/>
+    <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+  </linearGradient>
+
+  <radialGradient id="glowL" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glowR" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+  </radialGradient>
+
+  <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+    <path d="M26 0H0V26" fill="none" stroke="#16202D" stroke-width="1"/>
+  </pattern>
+
+  <clipPath id="cardClip"><rect x="1" y="1" width="998" height="298" rx="14"/></clipPath>
+  <clipPath id="bodyClip"><rect x="1" y="46" width="998" height="253"/></clipPath>
+</defs>
+
+<style>
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .sans { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; }
+  text  { text-rendering: geometricPrecision; }
+
+  @keyframes scan   { 0% { transform: translateX(-260px);} 100% { transform: translateX(1020px);} }
+  @keyframes blink  { 0%,45% { opacity:1 } 50%,95% { opacity:0 } 100% { opacity:1 } }
+  @keyframes drawIn { 0%,8% { stroke-dashoffset:22 } 26%,100% { stroke-dashoffset:0 } }
+  @keyframes ringp  { 0% { r:17px; opacity:.55 } 70%,100% { r:29px; opacity:0 } }
+  @keyframes barf   { 0% { width:0 } 62%,100% { width:876px } }
+  @keyframes rulef  { 0% { width:0 } 40%,100% { width:340px } }
+  @keyframes fadeUp { 0% { opacity:0; transform:translateY(9px) } 100% { opacity:1; transform:translateY(0) } }
+  @keyframes drift  { 0% { transform:translateY(0); opacity:0 } 15%,70% { opacity:.5 } 100% { transform:translateY(-46px); opacity:0 } }
+  @keyframes swap   { 0%,28% { opacity:1 } 33%,100% { opacity:0 } }
+  @keyframes pctf   { 0%,20% { opacity:0 } 68%,100% { opacity:1 } }
+
+  .scan  { animation: scan 7s cubic-bezier(.4,0,.6,1) infinite; }
+  .cur   { animation: blink 1.1s steps(1) infinite; }
+  .chk   { stroke-dasharray:22; animation: drawIn 7s ease-out infinite; }
+  .ring  { animation: ringp 2.6s ease-out infinite; }
+  .bar   { animation: barf 7s cubic-bezier(.25,.9,.3,1) infinite; }
+  .rule  { animation: rulef 7s cubic-bezier(.25,.9,.3,1) infinite; }
+  .pctv  { animation: pctf 7s ease-out infinite; }
+  .up1   { opacity:0; animation: fadeUp .8s ease-out .10s forwards; }
+  .up2   { opacity:0; animation: fadeUp .8s ease-out .26s forwards; }
+  .up3   { opacity:0; animation: fadeUp .8s ease-out .42s forwards; }
+  .up4   { opacity:0; animation: fadeUp .8s ease-out .58s forwards; }
+  .p     { animation: drift 5.5s linear infinite; }
+  .h1    { animation: swap 4.2s steps(1) infinite; }
+  .h2    { animation: swap 4.2s steps(1) infinite; animation-delay:-1.4s; }
+  .h3    { animation: swap 4.2s steps(1) infinite; animation-delay:-2.8s; }
+
+  /* Hold every animation at its resolved end state rather than at frame zero,
+     which would otherwise leave the faded-in copy invisible. */
+  @media (prefers-reduced-motion: reduce) {
+    .up1, .up2, .up3, .up4 { opacity:1; transform:none; animation:none; }
+    .chk  { stroke-dashoffset:0; animation:none; }
+    .bar  { width:876px; animation:none; }
+    .rule { width:340px; animation:none; }
+    .pctv { opacity:1; animation:none; }
+    .cur  { opacity:1; animation:none; }
+    .h1   { opacity:1; animation:none; }
+    .h2, .h3, .scan, .p, .ring { opacity:0; animation:none; }
+  }
+</style>
+
+<rect x="1" y="1" width="998" height="298" rx="14" fill="#080C14" stroke="#1B2635" stroke-width="1.5"/>
+
+<g clip-path="url(#cardClip)">
+  <rect x="1" y="46" width="998" height="253" fill="url(#grid)" opacity="0.55"/>
+  <ellipse cx="150" cy="150" rx="420" ry="230" fill="url(#glowL)"/>
+  <ellipse cx="880" cy="120" rx="360" ry="210" fill="url(#glowR)"/>
+
+  <rect x="1" y="1" width="998" height="45" fill="#0C1220"/>
+  <line x1="1" y1="45.5" x2="999" y2="45.5" stroke="#1B2635" stroke-width="1.5"/>
+  <circle cx="27" cy="23" r="5.5" fill="#F87171"/>
+  <circle cx="47" cy="23" r="5.5" fill="#FBBF24"/>
+  <circle cx="67" cy="23" r="5.5" fill="#34D399"/>
+  <text class="mono" x="92" y="28" font-size="12.5" fill="#4E5F70">alen@identity</text>
+  <text class="mono" x="196" y="28" font-size="12.5" fill="#33414F">~/verify</text>
+  <text class="mono" x="256" y="28" font-size="12.5" fill="#22D3EE" opacity="0.85">--subject &quot;Alen Issac Sam&quot; --chain eth,algo</text>
+
+  <g clip-path="url(#bodyClip)">
+    <g fill="#22D3EE">
+      <circle class="p" cx="120" cy="250" r="1.4"/>
+      <circle class="p" cx="330" cy="268" r="1.1" style="animation-delay:-1.9s"/>
+      <circle class="p" cx="590" cy="258" r="1.3" style="animation-delay:-3.4s"/>
+    </g>
+    <g fill="#8B5CF6">
+      <circle class="p" cx="760" cy="262" r="1.2" style="animation-delay:-.9s"/>
+      <circle class="p" cx="930" cy="252" r="1.4" style="animation-delay:-2.6s"/>
+    </g>
+
+    <g class="up1">
+      <text class="mono" x="48" y="88" font-size="11.5" letter-spacing="2.6" fill="#22D3EE">&#187; IDENTITY RESOLVED</text>
+    </g>
+
+    <g class="up2">
+      <text class="sans" x="46" y="152" font-size="52" font-weight="800" letter-spacing="0.5" fill="url(#nameGrad)">ALEN ISSAC SAM</text>
+    </g>
+
+    <rect class="rule" x="48" y="166" height="2.5" rx="1.25" fill="url(#ruleGrad)"/>
+
+    <g class="up3">
+      <text class="sans" x="48" y="196" font-size="16.5" fill="#8FA0B0">Decentralized Identity<tspan fill="#3E4C5A"> &#183; </tspan>Smart Contracts<tspan fill="#3E4C5A"> &#183; </tspan>AI</text>
+    </g>
+
+    <g class="up4">
+      <rect x="48" y="212" width="132" height="24" rx="12" fill="#0E1826" stroke="#1E3040"/>
+      <text class="mono" x="62" y="228" font-size="11" fill="#7DD3FC">IIT Hyderabad</text>
+      <rect x="190" y="212" width="146" height="24" rx="12" fill="#0E1826" stroke="#1E3040"/>
+      <text class="mono" x="204" y="228" font-size="11" fill="#A78BFA">Hyderabad, India</text>
+    </g>
+
+    <g class="up3">
+      <rect x="676" y="74" width="276" height="126" rx="11" fill="#0B121C" stroke="#1E2B3A"/>
+
+      <circle class="ring" cx="712" cy="108" r="17" fill="none" stroke="#34D399" stroke-width="1.5"/>
+      <circle cx="712" cy="108" r="17" fill="#34D399" fill-opacity="0.10" stroke="#34D399" stroke-width="1.5"/>
+      <path class="chk" d="M705 108 l5 5 l10 -11" fill="none" stroke="#34D399" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <text class="sans" x="742" y="105" font-size="14.5" font-weight="700" letter-spacing="2.2" fill="#34D399">VERIFIED</text>
+      <text class="mono" x="742" y="122" font-size="10.5" fill="#4E5F70">on-chain attestation</text>
+
+      <line x1="694" y1="142" x2="934" y2="142" stroke="#182432"/>
+
+      <text class="mono" x="694" y="163" font-size="10.5" fill="#3E4C5A">did</text>
+      <g>
+        <text class="mono h1" x="722" y="163" font-size="10.5" fill="#7DD3FC">did:ethr:0x4f2a...9c1b</text>
+        <text class="mono h2" x="722" y="163" font-size="10.5" fill="#7DD3FC">did:algo:MXQ7...K3PZ</text>
+        <text class="mono h3" x="722" y="163" font-size="10.5" fill="#7DD3FC">did:ethr:0xB81e...04af</text>
+      </g>
+
+      <text class="mono" x="694" y="182" font-size="10.5" fill="#3E4C5A">sig</text>
+      <g>
+        <text class="mono h1" x="722" y="182" font-size="10.5" fill="#A78BFA">0x8f2ae41c...d770</text>
+        <text class="mono h2" x="722" y="182" font-size="10.5" fill="#A78BFA">0x31c95b0a...19e4</text>
+        <text class="mono h3" x="722" y="182" font-size="10.5" fill="#A78BFA">0xc740de88...5b2f</text>
+      </g>
+    </g>
+
+    <g class="up4">
+      <text class="mono" x="48" y="252" font-size="11.5" fill="#4E5F70">&#9656; resolving credential across ethereum + algorand</text>
+      <text class="mono pctv" x="952" y="252" font-size="11.5" text-anchor="end" fill="#34D399">100% VERIFIED</text>
+      <rect x="48" y="264" width="876" height="4" rx="2" fill="#141F2B"/>
+      <rect class="bar" x="48" y="264" height="4" rx="2" fill="url(#barGrad)"/>
+      <rect class="cur" x="936" y="244" width="8" height="12" fill="#22D3EE"/>
+    </g>
+  </g>
+
+  <g clip-path="url(#bodyClip)">
+    <rect class="scan" x="0" y="46" width="240" height="253" fill="url(#scanGrad)"/>
+  </g>
+</g>
+</svg>
