@@ -1,8 +1,8 @@
 <!-- ────────────────────────────────────────────────────────────────
      Assets in assets/ are generated. Don't hand-edit the SVGs.
        assets/header.svg, assets/footer.svg   authored by hand
-       assets/stack-*.svg                     python .github/scripts/build_stack.py
-       assets/generated/*.svg                 rebuilt daily by .github/workflows/cards.yml
+       assets/stack-*.svg, assets/focus-*.svg  python .github/scripts/build_stack.py
+       assets/generated/*.svg                  rebuilt daily by .github/workflows/cards.yml
      ──────────────────────────────────────────────────────────── -->
 
 <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/header.svg" width="100%" alt="Alen Issac Sam — Decentralized Identity · Smart Contracts · AI" />
@@ -50,33 +50,26 @@ trading/market-structure tooling.
 
 <br/>
 
-## `» current_focus`
-
-| | |
-|:-:|:--|
-| 🔗 | Shipping **DID + verifiable credential** flows across Ethereum & Algorand |
-| 🤖 | Building **multi-agent systems** with Google's Agent Development Kit |
-| 📈 | Prediction markets & **order-flow analysis** for real-time trading |
-| 🧪 | Neural networks from scratch — no frameworks, just NumPy and pain |
-
-<br/>
-
-## `» tech_arsenal`
-
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/stack-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/stack-light.svg" />
-  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/stack-dark.svg" width="100%" alt="Tech stack: Solidity, Ethereum, Algorand, Foundry, PyTeal, IPFS, TypeScript, Python, JavaScript, React, Next.js, Vite, Tailwind, TensorFlow, scikit-learn, NumPy, Pandas, Jupyter, Google ADK, Supabase, Firebase, Vercel, Node.js, Git" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/focus-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/focus-light.svg" />
+  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/focus-dark.svg" width="100%" alt="Current focus: DID and verifiable credentials, multi-agent systems, prediction markets and order flow, neural nets from scratch" />
 </picture>
 
 <br/>
 
-## `» featured_work`
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/stack-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/stack-light.svg" />
+  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/stack-dark.svg" width="100%" alt="Tech arsenal: Solidity, Ethereum, Algorand, Foundry, PyTeal, IPFS, TypeScript, Python, JavaScript, React, Next.js, Vite, Tailwind, TensorFlow, scikit-learn, NumPy, Pandas, Jupyter, Google ADK, Supabase, Firebase, Vercel, Node.js, Git" />
+</picture>
+
+<br/>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/projects-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/projects-light.svg" />
-  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/projects-dark.svg" width="100%" alt="Featured projects, rebuilt daily from the GitHub API" />
+  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/projects-dark.svg" width="100%" alt="Featured work, rebuilt daily from the GitHub API" />
 </picture>
 
 <details>
@@ -96,15 +89,11 @@ trading/market-structure tooling.
 
 <br/>
 
-## `» the_numbers`
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/telemetry-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/telemetry-light.svg" />
-  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/telemetry-dark.svg" width="100%" alt="GitHub telemetry: commits, contributions, repos, pull requests, streaks, language distribution and contribution calendar" />
+  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/generated/telemetry-dark.svg" width="100%" alt="Telemetry: projects, languages, contributions, commits, streaks, language distribution and contribution calendar" />
 </picture>
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=alenissacsam-2&bg_color=080C14&color=E6EDF3&line=22D3EE&point=8B5CF6&area=true&area_color=22D3EE&title_color=22D3EE&hide_border=true&custom_title=Contribution%20Activity" width="100%" alt="Contribution activity graph" />
 
 <br/>
 

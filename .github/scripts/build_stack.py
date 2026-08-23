@@ -78,8 +78,8 @@ def fetch_glyph(slug: str) -> str:
 
 def build(theme_name: str, t: dict, glyphs: dict[str, str]) -> str:
     W = 1000
-    pad_x, icon, gap, chip_h = 14, 15.0, 8.0, 32.0
-    label_size, chip_gap, row_gap = 11.5, 9.0, 16.0
+    pad_x, icon, gap, chip_h = 17, 17.5, 10.0, 38.0
+    label_size, chip_gap, row_gap = 12.5, 10.0, 18.0
 
     # ---- lay chips out first so the canvas can be sized to fit ----
     rows: list[list[dict]] = []
@@ -99,21 +99,22 @@ def build(theme_name: str, t: dict, glyphs: dict[str, str]) -> str:
             x += w + chip_gap
         rows.append(row)
 
-    H = 42 + 26
+    H = 64 + 26
     row_y: list[float] = []
     gi = 0
     for i, _row in enumerate(rows):
         while gi < len(group_at) and group_at[gi][1] == i:
-            H += 26  # group heading
+            H += 28  # group heading
             gi += 1
         row_y.append(H)
         H += chip_h + row_gap
-    H = int(H + 18)
+    H = int(H + 16)
 
+    tools = sum(len(entries) for _, entries in GROUPS)
     svg = bc.head(W, H, "Tech stack").replace("%GRID%", t["grid"])
-    svg += bc.chrome(t, W, H, "~/stack", "--all --group domain")
+    svg += bc.panel(t, W, H, "TECH ARSENAL", f"{tools} tools · {len(GROUPS)} domains", t["cyan"])
     svg += f'<g clip-path="url(#clip)">\n'
-    svg += f'  <rect x="1" y="43" width="{W - 2}" height="{H - 44}" fill="url(#grid)" opacity="0.5"/>\n'
+    svg += f'  <rect x="1" y="65" width="{W - 2}" height="{H - 66}" fill="url(#grid)" opacity="0.5"/>\n'
 
     heading_before = {idx: name for name, idx in group_at}
     delay = 0.08
@@ -143,7 +144,51 @@ def build(theme_name: str, t: dict, glyphs: dict[str, str]) -> str:
             svg += f'  </g>\n'
             delay += 0.022
 
-    svg += f'  <rect class="sweep" x="0" y="43" width="200" height="{H - 44}" fill="url(#sweepg)"/>\n'
+    svg += f'  <rect class="sweep" x="0" y="65" width="200" height="{H - 66}" fill="url(#sweepg)"/>\n'
+    svg += '</g>\n</svg>\n'
+    return svg
+
+
+# Four tracks, in the order they get worked on. Edit here, not in the SVG.
+FOCUS = [
+    ("IDENTITY", "DID + verifiable credentials",
+     "Issuance and verification flows running across both Ethereum and Algorand.", "cyan"),
+    ("AGENTS", "Multi-agent systems",
+     "Orchestration and tool use built on Google's Agent Development Kit.", "violet"),
+    ("MARKETS", "Prediction markets & order flow",
+     "Real-time microstructure analysis for on-chain event trading.", "green"),
+    ("FOUNDATIONS", "Neural nets from scratch",
+     "Backprop derived by hand. No frameworks - just NumPy and pain.", "amber"),
+]
+
+
+def build_focus(t: dict) -> str:
+    W, H = 1000, 306
+    cw, ch = 452, 96
+    svg = bc.head(W, H, "Current focus").replace("%GRID%", t["grid"])
+    svg += bc.panel(t, W, H, "CURRENT FOCUS", f"{len(FOCUS)} active tracks", t["violet"])
+    svg += f'<g clip-path="url(#clip)">\n'
+    svg += f'  <rect x="1" y="65" width="{W - 2}" height="{H - 66}" fill="url(#grid)" opacity="0.5"/>\n'
+
+    for i, (tag, title, body, key) in enumerate(FOCUS):
+        col, row = i % 2, i // 2
+        x = 30 + col * 488
+        y = 82 + row * 112
+        accent = t[key]
+        svg += f'  <g class="r" style="animation-delay:{0.10 + i * 0.08:.2f}s">\n'
+        svg += (f'    <rect x="{x}" y="{y}" width="{cw}" height="{ch}" rx="10" '
+                f'fill="{t["panel"]}" stroke="{t["stroke"]}"/>\n')
+        svg += f'    <rect x="{x}" y="{y + 14}" width="3" height="{ch - 28}" rx="1.5" fill="{accent}"/>\n'
+        svg += (f'    <text class="m" x="{x + 22}" y="{y + 27}" font-size="9.5" letter-spacing="1.9" '
+                f'fill="{accent}">{tag}</text>\n')
+        svg += (f'    <text class="s" x="{x + 22}" y="{y + 51}" font-size="16.5" font-weight="700" '
+                f'fill="{t["text"]}">{bc.esc(title)}</text>\n')
+        for j, line in enumerate(bc.wrap(body, 11, cw - 46, 2, True)):
+            svg += (f'    <text class="m" x="{x + 22}" y="{y + 70 + j * 15}" font-size="11" '
+                    f'fill="{t["muted"]}">{bc.esc(line)}</text>\n')
+        svg += f'  </g>\n'
+
+    svg += f'  <rect class="sweep" x="0" y="65" width="200" height="{H - 66}" fill="url(#sweepg)"/>\n'
     svg += '</g>\n</svg>\n'
     return svg
 
@@ -161,9 +206,10 @@ def main() -> int:
 
     OUT.mkdir(parents=True, exist_ok=True)
     for name, t in bc.THEMES.items():
-        path = OUT / f"stack-{name}.svg"
-        path.write_text(build(name, t, glyphs), encoding="utf-8")
-        print(f"wrote {path} ({path.stat().st_size}b)")
+        for stem, svg in (("stack", build(name, t, glyphs)), ("focus", build_focus(t))):
+            path = OUT / f"{stem}-{name}.svg"
+            path.write_text(svg, encoding="utf-8")
+            print(f"wrote {path} ({path.stat().st_size}b)")
     return 0
 
 

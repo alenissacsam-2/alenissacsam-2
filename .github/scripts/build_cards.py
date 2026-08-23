@@ -404,18 +404,21 @@ def compact(n: int | None, suffix: str = "") -> str:
     return f"{n}{suffix}"
 
 
-def chrome(t: dict, w: int, h: int, path: str, flag: str) -> str:
-    """Shared terminal-window frame: rounded shell, traffic lights, title."""
+def panel(t: dict, w: int, h: int, title: str, meta: str, accent: str) -> str:
+    """Section frame for the body cards.
+
+    Deliberately NOT the terminal window used by the hero - traffic lights on
+    every card made the page read as one template stamped five times. These get
+    a hairline accent edge and a titled rule instead, so the family resemblance
+    survives without the repetition.
+    """
     return f"""<rect x="1" y="1" width="{w - 2}" height="{h - 2}" rx="13" fill="{t['bg']}" stroke="{t['stroke']}" stroke-width="1.5"/>
 <g clip-path="url(#clip)">
-  <rect x="1" y="1" width="{w - 2}" height="42" fill="{t['bar']}"/>
-  <line x1="1" y1="42.5" x2="{w - 1}" y2="42.5" stroke="{t['stroke']}" stroke-width="1.5"/>
-  <circle cx="26" cy="22" r="5" fill="#F87171"/>
-  <circle cx="44" cy="22" r="5" fill="#FBBF24"/>
-  <circle cx="62" cy="22" r="5" fill="#34D399"/>
-  <text class="m" x="86" y="26.5" font-size="12" fill="{t['muted']}">alen@identity</text>
-  <text class="m" x="{86 + text_width('alen@identity ', 12, True):.0f}" y="26.5" font-size="12" fill="{t['dim']}">{esc(path)}</text>
-  <text class="m" x="{86 + text_width('alen@identity ' + path + ' ', 12, True):.0f}" y="26.5" font-size="12" fill="{t['cyan']}" opacity="0.9">{esc(flag)}</text>
+  <rect x="1" y="1" width="{w - 2}" height="3" fill="{accent}"/>
+  <rect x="34" y="31" width="3.5" height="18" rx="1.75" fill="{accent}"/>
+  <text class="s" x="48" y="46" font-size="15" font-weight="700" letter-spacing="2.6" fill="{t['text']}">{esc(title)}</text>
+  <text class="m" x="{w - 34}" y="46" font-size="11.5" text-anchor="end" fill="{t['dim']}">{esc(meta)}</text>
+  <line x1="34" y1="64" x2="{w - 34}" y2="64" stroke="{t['stroke']}"/>
 </g>"""
 
 
@@ -462,45 +465,48 @@ def head(w: int, h: int, label: str) -> str:
 
 
 def render_telemetry(d: dict, t: dict) -> str:
-    W, H = 1000, 330
+    W, H = 1000, 348
     svg = head(W, H, "GitHub telemetry").replace("%GRID%", t["grid"])
-    svg += chrome(t, W, H, "~/stats", "--live --span 1y")
+    svg += panel(t, W, H, "TELEMETRY", "live · last 12 months", t["sky"])
     svg += f'<g clip-path="url(#clip)">\n'
-    svg += f'  <rect x="1" y="43" width="{W - 2}" height="{H - 44}" fill="url(#grid)" opacity="0.5"/>\n'
+    svg += f'  <rect x="1" y="65" width="{W - 2}" height="{H - 66}" fill="url(#grid)" opacity="0.5"/>\n'
 
+    # Ordered so the durable numbers lead. Activity counters sit below them
+    # because they depend on commit attribution, which can legitimately read
+    # low - a card that opens with four zeros undersells the work.
     stats = [
-        ("commits", compact(d["commits"]), t["cyan"]),
-        ("contributions", compact(d["contributions"]), t["violet"]),
-        ("public repos", compact(d["repos"]), t["green"]),
-        ("pull requests", compact(d["prs"]), t["sky"]),
+        ("projects shipped", compact(d["repos"]), t["cyan"]),
+        ("languages", compact(len(d["langs"])), t["violet"]),
+        ("contributions", compact(d["contributions"]), t["green"]),
+        ("commits", compact(d["commits"]), t["sky"]),
         ("current streak", compact(d["streak"], "d"), t["amber"]),
         ("longest streak", compact(d["longest"], "d"), t["violet"]),
     ]
     for i, (label, value, color) in enumerate(stats):
-        cx = 48 + (i % 2) * 232
-        cy = 104 + (i // 2) * 74
+        cx = 48 + (i % 2) * 236
+        cy = 118 + (i // 2) * 74
         svg += f'  <g class="r" style="animation-delay:{0.10 + i * 0.07:.2f}s">\n'
         svg += f'    <rect x="{cx - 14}" y="{cy - 36}" width="3" height="48" rx="1.5" fill="{color}"/>\n'
         svg += f'    <text class="s" x="{cx}" y="{cy}" font-size="31" font-weight="800" fill="{t["text"]}">{value}</text>\n'
         svg += f'    <text class="m" x="{cx}" y="{cy + 18}" font-size="9.5" letter-spacing="1.8" fill="{t["dim"]}">{label.upper()}</text>\n'
         svg += f'  </g>\n'
 
-    svg += f'  <line x1="512" y1="64" x2="512" y2="{H - 30}" stroke="{t["stroke"]}"/>\n'
+    svg += f'  <line x1="512" y1="86" x2="512" y2="{H - 34}" stroke="{t["stroke"]}"/>\n'
 
     # ── language distribution ──
     lx, lw = 548, 404
     svg += f'  <g class="r" style="animation-delay:.30s">\n'
-    svg += f'    <text class="m" x="{lx}" y="78" font-size="10" letter-spacing="2.2" fill="{t["cyan"]}">&#187; LANGUAGE DISTRIBUTION</text>\n'
+    svg += f'    <text class="m" x="{lx}" y="100" font-size="10" letter-spacing="2.2" fill="{t["cyan"]}">LANGUAGE DISTRIBUTION</text>\n'
     svg += f'  </g>\n'
-    svg += f'  <defs><clipPath id="langclip"><rect x="{lx}" y="90" width="{lw}" height="11" rx="5.5"/></clipPath></defs>\n'
-    svg += f'  <rect x="{lx}" y="90" width="{lw}" height="11" rx="5.5" fill="{t["track"]}"/>\n'
+    svg += f'  <defs><clipPath id="langclip"><rect x="{lx}" y="112" width="{lw}" height="11" rx="5.5"/></clipPath></defs>\n'
+    svg += f'  <rect x="{lx}" y="112" width="{lw}" height="11" rx="5.5" fill="{t["track"]}"/>\n'
     svg += f'  <g clip-path="url(#langclip)">\n'
-    svg += f'    <g class="g" style="transform-origin:{lx}px 95.5px; animation-delay:.35s">\n'
+    svg += f'    <g class="g" style="transform-origin:{lx}px 117.5px; animation-delay:.35s">\n'
     off = 0.0
     for lang in d["langs"]:
         seg = lw * lang["pct"] / 100.0
         # +0.5 overlap keeps hairline gaps from showing between segments
-        svg += (f'      <rect x="{lx + off:.2f}" y="90" width="{seg + 0.5:.2f}" height="11" '
+        svg += (f'      <rect x="{lx + off:.2f}" y="112" width="{seg + 0.5:.2f}" height="11" '
                 f'fill="{lang["color"]}"/>\n')
         off += seg
     svg += f'    </g>\n  </g>\n'
@@ -508,7 +514,7 @@ def render_telemetry(d: dict, t: dict) -> str:
     for i, lang in enumerate(d["langs"]):
         col, row = i % 2, i // 2
         ex = lx + col * 206
-        ey = 128 + row * 24
+        ey = 150 + row * 24
         svg += f'  <g class="r" style="animation-delay:{0.42 + i * 0.05:.2f}s">\n'
         svg += f'    <circle cx="{ex + 4}" cy="{ey - 4}" r="4.5" fill="{lang["color"]}"/>\n'
         svg += f'    <text class="m" x="{ex + 16}" y="{ey}" font-size="11.5" fill="{t["text"]}">{esc(lang["name"])}</text>\n'
@@ -517,9 +523,9 @@ def render_telemetry(d: dict, t: dict) -> str:
 
     # ── contribution heatmap, rendered from the real calendar ──
     svg += f'  <g class="r" style="animation-delay:.58s">\n'
-    svg += f'    <text class="m" x="{lx}" y="212" font-size="10" letter-spacing="2.2" fill="{t["cyan"]}">&#187; CONTRIBUTION CALENDAR</text>\n'
+    svg += f'    <text class="m" x="{lx}" y="234" font-size="10" letter-spacing="2.2" fill="{t["cyan"]}">CONTRIBUTION CALENDAR</text>\n'
     svg += f'  </g>\n'
-    svg += render_heatmap(d["weeks"], t, lx, 222)
+    svg += render_heatmap(d["weeks"], t, lx, 244)
 
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
     seeded = d["commits"] is None
@@ -528,10 +534,10 @@ def render_telemetry(d: dict, t: dict) -> str:
             if seeded else
             f"synced {stamp} &#183; regenerated daily from the github api")
     svg += f'  <g class="r" style="animation-delay:.80s">\n'
-    svg += f'    <circle cx="52" cy="{H - 30}" r="3.5" fill="{dotc}"/>\n'
-    svg += f'    <text class="m" x="64" y="{H - 26}" font-size="10.5" fill="{t["dim"]}">{note}</text>\n'
+    svg += f'    <circle cx="52" cy="{H - 26}" r="3.5" fill="{dotc}"/>\n'
+    svg += f'    <text class="m" x="64" y="{H - 22}" font-size="10.5" fill="{t["dim"]}">{note}</text>\n'
     svg += f'  </g>\n'
-    svg += f'  <rect class="sweep" x="0" y="43" width="200" height="{H - 44}" fill="url(#sweepg)"/>\n'
+    svg += f'  <rect class="sweep" x="0" y="65" width="200" height="{H - 66}" fill="url(#sweepg)"/>\n'
     svg += '</g>\n</svg>\n'
     return svg
 
@@ -583,17 +589,17 @@ def render_heatmap(weeks: list[dict], t: dict, x0: int, y0: int) -> str:
 
 
 def render_projects(d: dict, t: dict) -> str:
-    W, H = 1000, 430
+    W, H = 1000, 446
     svg = head(W, H, "Featured projects").replace("%GRID%", t["grid"])
-    svg += chrome(t, W, H, "~/projects", "--featured --sort relevance")
+    svg += panel(t, W, H, "FEATURED WORK", f'{len(d["projects"])} of {d["repos"]} repositories', t["green"])
     svg += f'<g clip-path="url(#clip)">\n'
-    svg += f'  <rect x="1" y="43" width="{W - 2}" height="{H - 44}" fill="url(#grid)" opacity="0.5"/>\n'
+    svg += f'  <rect x="1" y="65" width="{W - 2}" height="{H - 66}" fill="url(#grid)" opacity="0.5"/>\n'
 
     cw, ch = 452, 108
     for i, repo in enumerate(d["projects"]):
         col, row = i % 2, i // 2
         x = 30 + col * 488
-        y = 62 + row * 120
+        y = 82 + row * 120
         lang = repo.get("primaryLanguage") or {}
         lname = lang.get("name") or "Multi"
         lcolor = lang.get("color") or t["violet"]
@@ -628,7 +634,7 @@ def render_projects(d: dict, t: dict) -> str:
         svg += f'    <text class="m" x="{x + cw - 20}" y="{fy}" font-size="10" text-anchor="end" fill="{t["dim"]}">updated {ago(repo["pushedAt"])}</text>\n'
         svg += f'  </g>\n'
 
-    svg += f'  <rect class="sweep" x="0" y="43" width="200" height="{H - 44}" fill="url(#sweepg)"/>\n'
+    svg += f'  <rect class="sweep" x="0" y="65" width="200" height="{H - 66}" fill="url(#sweepg)"/>\n'
     svg += '</g>\n</svg>\n'
     return svg
 
