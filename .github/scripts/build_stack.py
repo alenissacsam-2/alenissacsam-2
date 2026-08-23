@@ -149,6 +149,115 @@ def build(theme_name: str, t: dict, glyphs: dict[str, str]) -> str:
     return svg
 
 
+# ── whoami ──────────────────────────────────────────────────────────────
+# Token colours for the hand-highlighted TypeScript block.
+SYNTAX = {
+    "dark":  dict(kw="#C084FC", ident="#E6EDF3", prop="#7DD3FC",
+                  s="#34D399", punct="#55606D"),
+    "light": dict(kw="#7C3AED", ident="#1F2328", prop="#0369A1",
+                  s="#047857", punct="#8C959F"),
+}
+
+IDENTITY = [
+    ("location", "Hyderabad, India"),
+    ("school", "IIT Hyderabad"),
+    ("focus", "Decentralized identity & verifiable credentials"),
+    ("chains", ["Ethereum", "Algorand"]),
+    ("stack", ["Solidity", "PyTeal", "TypeScript", "Python"]),
+    ("alsoInto", ["AI agents", "market microstructure", "geospatial analysis"]),
+    ("philosophy", "Trust should be verifiable, not assumed."),
+]
+
+BRIEF = ("I build systems where identity and credentials live on-chain, so a "
+         "certificate, a degree, or a KYC check can be verified by anyone, "
+         "without phoning a central authority.")
+
+TRACKS = [
+    ("3 identity projects", "Ethereum + Algorand", "cyan"),
+    ("AI agents", "Google ADK, multi-agent", "violet"),
+    ("Neural nets", "from first principles", "green"),
+]
+
+
+def code_lines() -> list[list[tuple[str, str]]]:
+    """The identity object as (text, token-kind) pairs, values column-aligned."""
+    width = max(len(k) for k, _ in IDENTITY)
+    lines: list[list[tuple[str, str]]] = [
+        [("const", "kw"), (" alen", "ident"), (" = {", "punct")]
+    ]
+    for key, val in IDENTITY:
+        pad = " " * (width - len(key) + 1)
+        toks: list[tuple[str, str]] = [(f"  {key}", "prop"), (f":{pad}", "punct")]
+        if isinstance(val, list):
+            toks.append(("[", "punct"))
+            for i, item in enumerate(val):
+                if i:
+                    toks.append((", ", "punct"))
+                toks.append((f'"{item}"', "s"))
+            toks.append(("],", "punct"))
+        else:
+            toks += [(f'"{val}"', "s"), (",", "punct")]
+        lines.append(toks)
+    lines.append([("};", "punct")])
+    return lines
+
+
+def build_whoami(theme_name: str, t: dict) -> str:
+    W, H = 1000, 348
+    fs, lh = 12.0, 22.0
+    syn = SYNTAX[theme_name]
+    lines = code_lines()
+
+    svg = bc.head(W, H, "whoami").replace("%GRID%", t["grid"])
+    svg += bc.panel(t, W, H, "WHOAMI", "identity object", t["cyan"])
+    svg += f'<g clip-path="url(#clip)">\n'
+    svg += f'  <rect x="1" y="65" width="{W - 2}" height="{H - 66}" fill="url(#grid)" opacity="0.5"/>\n'
+
+    # ---- code pane ----
+    svg += (f'  <rect x="30" y="82" width="620" height="234" rx="10" '
+            f'fill="{t["panel"]}" stroke="{t["stroke"]}"/>\n')
+    for i, toks in enumerate(lines):
+        y = 108 + i * lh
+        svg += f'  <g class="r" style="animation-delay:{0.10 + i * 0.045:.2f}s">\n'
+        svg += (f'    <text class="m" x="62" y="{y}" font-size="{fs}" text-anchor="end" '
+                f'fill="{t["dim"]}">{i + 1}</text>\n')
+        svg += f'    <text class="m" x="78" y="{y}" font-size="{fs}">'
+        for text, kind in toks:
+            # Hard spaces: SVG renderers collapse runs of ordinary whitespace
+            # even under xml:space="preserve", which flattened the indentation
+            # and the value alignment. In a monospace face nbsp has the same
+            # advance width, so the column grid survives.
+            body = bc.esc(text).replace(" ", "&#160;")
+            svg += f'<tspan fill="{syn[kind]}">{body}</tspan>'
+        svg += '</text>\n  </g>\n'
+
+    # ---- brief pane ----
+    bx, bw = 670, 300
+    svg += (f'  <rect x="{bx}" y="82" width="{bw}" height="234" rx="10" '
+            f'fill="{t["panel"]}" stroke="{t["stroke"]}"/>\n')
+    svg += f'  <g class="r" style="animation-delay:.24s">\n'
+    svg += (f'    <text class="m" x="{bx + 20}" y="110" font-size="9.5" letter-spacing="1.9" '
+            f'fill="{t["cyan"]}">BRIEF</text>\n')
+    for j, line in enumerate(bc.wrap(BRIEF, 11, bw - 42, 6, True)):
+        svg += (f'    <text class="m" x="{bx + 20}" y="{134 + j * 16}" font-size="11" '
+                f'fill="{t["muted"]}">{bc.esc(line)}</text>\n')
+    svg += f'  </g>\n'
+    svg += f'  <line x1="{bx + 20}" y1="236" x2="{bx + bw - 20}" y2="236" stroke="{t["stroke"]}"/>\n'
+    for k, (title, sub, key) in enumerate(TRACKS):
+        y = 260 + k * 24
+        svg += f'  <g class="r" style="animation-delay:{0.34 + k * 0.06:.2f}s">\n'
+        svg += f'    <circle cx="{bx + 24}" cy="{y - 4}" r="3.5" fill="{t[key]}"/>\n'
+        svg += (f'    <text class="m" x="{bx + 36}" y="{y}" font-size="11" '
+                f'fill="{t["text"]}">{bc.esc(title)}</text>\n')
+        svg += (f'    <text class="m" x="{bx + bw - 20}" y="{y}" font-size="10" text-anchor="end" '
+                f'fill="{t["dim"]}">{bc.esc(sub)}</text>\n')
+        svg += f'  </g>\n'
+
+    svg += f'  <rect class="sweep" x="0" y="65" width="200" height="{H - 66}" fill="url(#sweepg)"/>\n'
+    svg += '</g>\n</svg>\n'
+    return svg
+
+
 # Four tracks, in the order they get worked on. Edit here, not in the SVG.
 FOCUS = [
     ("IDENTITY", "DID + verifiable credentials",
@@ -206,7 +315,9 @@ def main() -> int:
 
     OUT.mkdir(parents=True, exist_ok=True)
     for name, t in bc.THEMES.items():
-        for stem, svg in (("stack", build(name, t, glyphs)), ("focus", build_focus(t))):
+        for stem, svg in (("stack", build(name, t, glyphs)),
+                          ("focus", build_focus(t)),
+                          ("whoami", build_whoami(name, t))):
             path = OUT / f"{stem}-{name}.svg"
             path.write_text(svg, encoding="utf-8")
             print(f"wrote {path} ({path.stat().st_size}b)")

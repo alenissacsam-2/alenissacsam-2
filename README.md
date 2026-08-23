@@ -26,7 +26,19 @@
 
 ---
 
-## `» whoami`
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/whoami-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/whoami-light.svg" />
+  <img src="https://raw.githubusercontent.com/alenissacsam-2/alenissacsam-2/main/assets/whoami-dark.svg" width="100%" alt="whoami — Alen Issac Sam: Hyderabad, India; IIT Hyderabad; focused on decentralized identity and verifiable credentials; building on Ethereum and Algorand with Solidity, PyTeal, TypeScript and Python; also working on AI agents, market microstructure and geospatial analysis. Trust should be verifiable, not assumed." />
+</picture>
+
+Three of my projects attack that from different angles: one on **Algorand**, one on
+**Ethereum**, and one purely on **certificate issuance and verification**. Alongside
+that I work on **AI agents** (Google ADK), neural nets from first principles, and
+trading/market-structure tooling.
+
+<details>
+<summary><b>&nbsp;&nbsp;Copy the raw block&nbsp;&nbsp;↓</b></summary>
 
 ```ts
 const alen = {
@@ -40,13 +52,7 @@ const alen = {
 };
 ```
 
-I build systems where **identity and credentials live on-chain** — so a certificate, a
-degree, or a KYC check can be verified by anyone, without phoning a central authority.
-
-Three of my projects attack that from different angles: one on **Algorand**, one on
-**Ethereum**, and one purely on **certificate issuance and verification**. Alongside
-that I work on **AI agents** (Google ADK), neural nets from first principles, and
-trading/market-structure tooling.
+</details>
 
 <br/>
 
