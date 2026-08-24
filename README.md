@@ -16,7 +16,7 @@
 <a href="https://your-portfolio.com"><img src="https://img.shields.io/badge/Portfolio-0B121C?style=for-the-badge&logo=vercel&logoColor=22D3EE" alt="Portfolio" /></a>
 -->
 
-<br/><br/>
+<br/>
 
 <img src="https://komarev.com/ghpvc/?username=alenissacsam-2&label=PROFILE+VIEWS&color=0b121c&style=flat-square" alt="Profile views" />
 <img src="https://img.shields.io/github/followers/alenissacsam-2?label=FOLLOWERS&style=flat-square&color=22D3EE&labelColor=0b121c" alt="Followers" />

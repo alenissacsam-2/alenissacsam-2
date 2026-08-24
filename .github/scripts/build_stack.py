@@ -159,7 +159,7 @@ SYNTAX = {
 }
 
 IDENTITY = [
-    ("location", "Hyderabad, India"),
+    ("location", "Kerala, India"),
     ("school", "IIT Hyderabad"),
     ("focus", "Decentralized identity & verifiable credentials"),
     ("chains", ["Ethereum", "Algorand"]),
