@@ -47,7 +47,7 @@
     <text class="m" x="50" y="163" font-size="10.5" fill="#7D8590">document verification</text>
     <circle cx="54" cy="172" r="4" fill="#3178c6"/>
     <text class="m" x="64" y="176" font-size="10.5" fill="#E6EDF3">TypeScript</text>
-    <text class="m" x="462" y="176" font-size="10" text-anchor="end" fill="#3E4C5A">updated yesterday</text>
+    <text class="m" x="462" y="176" font-size="10" text-anchor="end" fill="#3E4C5A">updated 2d ago</text>
   </g>
   <g class="r" style="animation-delay:0.17s">
     <rect x="518" y="82" width="452" height="108" rx="10" fill="#0B121C" stroke="#1B2635"/>
@@ -58,7 +58,7 @@
     <text class="m" x="538" y="163" font-size="10.5" fill="#7D8590">verify credentials</text>
     <circle cx="542" cy="172" r="4" fill="#f1e05a"/>
     <text class="m" x="552" y="176" font-size="10.5" fill="#E6EDF3">JavaScript</text>
-    <text class="m" x="950" y="176" font-size="10" text-anchor="end" fill="#3E4C5A">updated yesterday</text>
+    <text class="m" x="950" y="176" font-size="10" text-anchor="end" fill="#3E4C5A">updated 2d ago</text>
   </g>
   <g class="r" style="animation-delay:0.24s">
     <rect x="30" y="202" width="452" height="108" rx="10" fill="#0B121C" stroke="#1B2635"/>
@@ -69,7 +69,7 @@
     <text class="m" x="50" y="283" font-size="10.5" fill="#7D8590">server-side attestation</text>
     <circle cx="54" cy="292" r="4" fill="#3178c6"/>
     <text class="m" x="64" y="296" font-size="10.5" fill="#E6EDF3">TypeScript</text>
-    <text class="m" x="462" y="296" font-size="10" text-anchor="end" fill="#3E4C5A">updated yesterday</text>
+    <text class="m" x="462" y="296" font-size="10" text-anchor="end" fill="#3E4C5A">updated 2d ago</text>
   </g>
   <g class="r" style="animation-delay:0.31s">
     <rect x="518" y="202" width="452" height="108" rx="10" fill="#0B121C" stroke="#1B2635"/>
@@ -80,7 +80,7 @@
     <text class="m" x="538" y="283" font-size="10.5" fill="#7D8590">Development Kit</text>
     <circle cx="542" cy="292" r="4" fill="#DA5B0B"/>
     <text class="m" x="552" y="296" font-size="10.5" fill="#E6EDF3">Jupyter Notebook</text>
-    <text class="m" x="950" y="296" font-size="10" text-anchor="end" fill="#3E4C5A">updated yesterday</text>
+    <text class="m" x="950" y="296" font-size="10" text-anchor="end" fill="#3E4C5A">updated 2d ago</text>
   </g>
   <g class="r" style="animation-delay:0.38s">
     <rect x="30" y="322" width="452" height="108" rx="10" fill="#0B121C" stroke="#1B2635"/>
@@ -101,7 +101,7 @@
     <text class="m" x="538" y="403" font-size="10.5" fill="#7D8590">no ML frameworks</text>
     <circle cx="542" cy="412" r="4" fill="#DA5B0B"/>
     <text class="m" x="552" y="416" font-size="10.5" fill="#E6EDF3">Jupyter Notebook</text>
-    <text class="m" x="950" y="416" font-size="10" text-anchor="end" fill="#3E4C5A">updated yesterday</text>
+    <text class="m" x="950" y="416" font-size="10" text-anchor="end" fill="#3E4C5A">updated 2d ago</text>
   </g>
   <rect class="sweep" x="0" y="65" width="200" height="380" fill="url(#sweepg)"/>
 </g>
