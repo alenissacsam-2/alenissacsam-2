@@ -76,38 +76,38 @@
   <rect x="548" y="112" width="404" height="11" rx="5.5" fill="#141F2B"/>
   <g clip-path="url(#langclip)">
     <g class="g" style="transform-origin:548px 117.5px; animation-delay:.35s">
-      <rect x="548.00" y="112" width="134.25" height="11" fill="#AA6746"/>
-      <rect x="681.75" y="112" width="102.25" height="11" fill="#DA5B0B"/>
-      <rect x="783.50" y="112" width="81.53" height="11" fill="#f1e05a"/>
-      <rect x="864.54" y="112" width="62.95" height="11" fill="#3178c6"/>
-      <rect x="926.99" y="112" width="13.01" height="11" fill="#dea584"/>
-      <rect x="939.50" y="112" width="13.00" height="11" fill="#3572A5"/>
+      <rect x="548.00" y="112" width="132.91" height="11" fill="#AA6746"/>
+      <rect x="680.41" y="112" width="101.23" height="11" fill="#DA5B0B"/>
+      <rect x="781.14" y="112" width="80.92" height="11" fill="#f1e05a"/>
+      <rect x="861.56" y="112" width="62.32" height="11" fill="#3178c6"/>
+      <rect x="923.38" y="112" width="16.75" height="11" fill="#dea584"/>
+      <rect x="939.63" y="112" width="12.87" height="11" fill="#3572A5"/>
     </g>
   </g>
   <g class="r" style="animation-delay:0.42s">
     <circle cx="552" cy="146" r="4.5" fill="#AA6746"/>
     <text class="m" x="564" y="150" font-size="11.5" fill="#E6EDF3">Solidity</text>
-    <text class="m" x="734" y="150" font-size="11" text-anchor="end" fill="#3E4C5A">33.1%</text>
+    <text class="m" x="734" y="150" font-size="11" text-anchor="end" fill="#3E4C5A">32.8%</text>
   </g>
   <g class="r" style="animation-delay:0.47s">
     <circle cx="758" cy="146" r="4.5" fill="#DA5B0B"/>
     <text class="m" x="770" y="150" font-size="11.5" fill="#E6EDF3">Jupyter Notebook</text>
-    <text class="m" x="940" y="150" font-size="11" text-anchor="end" fill="#3E4C5A">25.2%</text>
+    <text class="m" x="940" y="150" font-size="11" text-anchor="end" fill="#3E4C5A">24.9%</text>
   </g>
   <g class="r" style="animation-delay:0.52s">
     <circle cx="552" cy="170" r="4.5" fill="#f1e05a"/>
     <text class="m" x="564" y="174" font-size="11.5" fill="#E6EDF3">JavaScript</text>
-    <text class="m" x="734" y="174" font-size="11" text-anchor="end" fill="#3E4C5A">20.1%</text>
+    <text class="m" x="734" y="174" font-size="11" text-anchor="end" fill="#3E4C5A">19.9%</text>
   </g>
   <g class="r" style="animation-delay:0.57s">
     <circle cx="758" cy="170" r="4.5" fill="#3178c6"/>
     <text class="m" x="770" y="174" font-size="11.5" fill="#E6EDF3">TypeScript</text>
-    <text class="m" x="940" y="174" font-size="11" text-anchor="end" fill="#3E4C5A">15.5%</text>
+    <text class="m" x="940" y="174" font-size="11" text-anchor="end" fill="#3E4C5A">15.3%</text>
   </g>
   <g class="r" style="animation-delay:0.62s">
     <circle cx="552" cy="194" r="4.5" fill="#dea584"/>
     <text class="m" x="564" y="198" font-size="11.5" fill="#E6EDF3">Rust</text>
-    <text class="m" x="734" y="198" font-size="11" text-anchor="end" fill="#3E4C5A">3.1%</text>
+    <text class="m" x="734" y="198" font-size="11" text-anchor="end" fill="#3E4C5A">4.0%</text>
   </g>
   <g class="r" style="animation-delay:0.67s">
     <circle cx="758" cy="194" r="4.5" fill="#3572A5"/>
@@ -483,6 +483,7 @@
     <rect x="894.8" y="278.0" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <rect x="894.8" y="284.8" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <rect x="901.6" y="244.0" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
+    <rect x="901.6" y="250.8" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <text class="m" x="548" y="305.6" font-size="9.5" fill="#3E4C5A">less</text>
     <rect x="576.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <rect x="585.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#0D4A5A"/>
@@ -493,7 +494,7 @@
   </g>
   <g class="r" style="animation-delay:.80s">
     <circle cx="52" cy="322" r="3.5" fill="#34D399"/>
-    <text class="m" x="64" y="326" font-size="10.5" fill="#3E4C5A">synced 2026-08-30 &#183; regenerated daily from the github api</text>
+    <text class="m" x="64" y="326" font-size="10.5" fill="#3E4C5A">synced 2026-08-31 &#183; regenerated daily from the github api</text>
   </g>
   <rect class="sweep" x="0" y="65" width="200" height="282" fill="url(#sweepg)"/>
 </g>
