@@ -488,6 +488,7 @@
     <rect x="901.6" y="264.4" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <rect x="901.6" y="271.2" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <rect x="901.6" y="278.0" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
+    <rect x="901.6" y="284.8" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <text class="m" x="548" y="305.6" font-size="9.5" fill="#3E4C5A">less</text>
     <rect x="576.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#141F2B"/>
     <rect x="585.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#0D4A5A"/>
@@ -498,7 +499,7 @@
   </g>
   <g class="r" style="animation-delay:.80s">
     <circle cx="52" cy="322" r="3.5" fill="#34D399"/>
-    <text class="m" x="64" y="326" font-size="10.5" fill="#3E4C5A">synced 2026-09-04 &#183; regenerated daily from the github api</text>
+    <text class="m" x="64" y="326" font-size="10.5" fill="#3E4C5A">synced 2026-09-05 &#183; regenerated daily from the github api</text>
   </g>
   <rect class="sweep" x="0" y="65" width="200" height="282" fill="url(#sweepg)"/>
 </g>
