@@ -50,22 +50,22 @@
   </g>
   <g class="r" style="animation-delay:0.24s">
     <rect x="34" y="156" width="3" height="48" rx="1.5" fill="#047857"/>
-    <text class="s" x="48" y="192" font-size="31" font-weight="800" fill="#1F2328">43</text>
+    <text class="s" x="48" y="192" font-size="31" font-weight="800" fill="#1F2328">63</text>
     <text class="m" x="48" y="210" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">CONTRIBUTIONS</text>
   </g>
   <g class="r" style="animation-delay:0.31s">
     <rect x="270" y="156" width="3" height="48" rx="1.5" fill="#0369A1"/>
-    <text class="s" x="284" y="192" font-size="31" font-weight="800" fill="#1F2328">26</text>
+    <text class="s" x="284" y="192" font-size="31" font-weight="800" fill="#1F2328">46</text>
     <text class="m" x="284" y="210" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">COMMITS</text>
   </g>
   <g class="r" style="animation-delay:0.38s">
     <rect x="34" y="230" width="3" height="48" rx="1.5" fill="#B45309"/>
-    <text class="s" x="48" y="266" font-size="31" font-weight="800" fill="#1F2328">4d</text>
+    <text class="s" x="48" y="266" font-size="31" font-weight="800" fill="#1F2328">6d</text>
     <text class="m" x="48" y="284" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">CURRENT STREAK</text>
   </g>
   <g class="r" style="animation-delay:0.45s">
     <rect x="270" y="230" width="3" height="48" rx="1.5" fill="#6D28D9"/>
-    <text class="s" x="284" y="266" font-size="31" font-weight="800" fill="#1F2328">4d</text>
+    <text class="s" x="284" y="266" font-size="31" font-weight="800" fill="#1F2328">6d</text>
     <text class="m" x="284" y="284" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">LONGEST STREAK</text>
   </g>
   <line x1="512" y1="86" x2="512" y2="314" stroke="#D5DCE3"/>
@@ -76,38 +76,38 @@
   <rect x="548" y="112" width="404" height="11" rx="5.5" fill="#E4E9EF"/>
   <g clip-path="url(#langclip)">
     <g class="g" style="transform-origin:548px 117.5px; animation-delay:.35s">
-      <rect x="548.00" y="112" width="132.03" height="11" fill="#AA6746"/>
-      <rect x="679.53" y="112" width="100.56" height="11" fill="#DA5B0B"/>
-      <rect x="779.59" y="112" width="80.46" height="11" fill="#f1e05a"/>
-      <rect x="859.55" y="112" width="61.91" height="11" fill="#3178c6"/>
-      <rect x="920.96" y="112" width="19.22" height="11" fill="#dea584"/>
-      <rect x="939.68" y="112" width="12.82" height="11" fill="#3572A5"/>
+      <rect x="548.00" y="112" width="130.75" height="11" fill="#AA6746"/>
+      <rect x="678.25" y="112" width="99.59" height="11" fill="#DA5B0B"/>
+      <rect x="777.34" y="112" width="79.69" height="11" fill="#f1e05a"/>
+      <rect x="856.53" y="112" width="61.32" height="11" fill="#3178c6"/>
+      <rect x="917.35" y="112" width="22.95" height="11" fill="#dea584"/>
+      <rect x="939.80" y="112" width="12.70" height="11" fill="#3572A5"/>
     </g>
   </g>
   <g class="r" style="animation-delay:0.42s">
     <circle cx="552" cy="146" r="4.5" fill="#AA6746"/>
     <text class="m" x="564" y="150" font-size="11.5" fill="#1F2328">Solidity</text>
-    <text class="m" x="734" y="150" font-size="11" text-anchor="end" fill="#98A1AB">32.6%</text>
+    <text class="m" x="734" y="150" font-size="11" text-anchor="end" fill="#98A1AB">32.2%</text>
   </g>
   <g class="r" style="animation-delay:0.47s">
     <circle cx="758" cy="146" r="4.5" fill="#DA5B0B"/>
     <text class="m" x="770" y="150" font-size="11.5" fill="#1F2328">Jupyter Notebook</text>
-    <text class="m" x="940" y="150" font-size="11" text-anchor="end" fill="#98A1AB">24.8%</text>
+    <text class="m" x="940" y="150" font-size="11" text-anchor="end" fill="#98A1AB">24.5%</text>
   </g>
   <g class="r" style="animation-delay:0.52s">
     <circle cx="552" cy="170" r="4.5" fill="#f1e05a"/>
     <text class="m" x="564" y="174" font-size="11.5" fill="#1F2328">JavaScript</text>
-    <text class="m" x="734" y="174" font-size="11" text-anchor="end" fill="#98A1AB">19.8%</text>
+    <text class="m" x="734" y="174" font-size="11" text-anchor="end" fill="#98A1AB">19.6%</text>
   </g>
   <g class="r" style="animation-delay:0.57s">
     <circle cx="758" cy="170" r="4.5" fill="#3178c6"/>
     <text class="m" x="770" y="174" font-size="11.5" fill="#1F2328">TypeScript</text>
-    <text class="m" x="940" y="174" font-size="11" text-anchor="end" fill="#98A1AB">15.2%</text>
+    <text class="m" x="940" y="174" font-size="11" text-anchor="end" fill="#98A1AB">15.1%</text>
   </g>
   <g class="r" style="animation-delay:0.62s">
     <circle cx="552" cy="194" r="4.5" fill="#dea584"/>
     <text class="m" x="564" y="198" font-size="11.5" fill="#1F2328">Rust</text>
-    <text class="m" x="734" y="198" font-size="11" text-anchor="end" fill="#98A1AB">4.6%</text>
+    <text class="m" x="734" y="198" font-size="11" text-anchor="end" fill="#98A1AB">5.6%</text>
   </g>
   <g class="r" style="animation-delay:0.67s">
     <circle cx="758" cy="194" r="4.5" fill="#3572A5"/>
@@ -487,7 +487,8 @@
     <rect x="901.6" y="257.6" width="5.2" height="5.2" rx="1.3" fill="#0E6D85"/>
     <rect x="901.6" y="264.4" width="5.2" height="5.2" rx="1.3" fill="#0E6D85"/>
     <rect x="901.6" y="271.2" width="5.2" height="5.2" rx="1.3" fill="#B4E4F0"/>
-    <rect x="901.6" y="278.0" width="5.2" height="5.2" rx="1.3" fill="#E7ECF1"/>
+    <rect x="901.6" y="278.0" width="5.2" height="5.2" rx="1.3" fill="#1E96B4"/>
+    <rect x="901.6" y="284.8" width="5.2" height="5.2" rx="1.3" fill="#0E6D85"/>
     <text class="m" x="548" y="305.6" font-size="9.5" fill="#98A1AB">less</text>
     <rect x="576.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#E7ECF1"/>
     <rect x="585.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#B4E4F0"/>
@@ -498,7 +499,7 @@
   </g>
   <g class="r" style="animation-delay:.80s">
     <circle cx="52" cy="322" r="3.5" fill="#047857"/>
-    <text class="m" x="64" y="326" font-size="10.5" fill="#98A1AB">synced 2026-09-11 &#183; regenerated daily from the github api</text>
+    <text class="m" x="64" y="326" font-size="10.5" fill="#98A1AB">synced 2026-09-12 &#183; regenerated daily from the github api</text>
   </g>
   <rect class="sweep" x="0" y="65" width="200" height="282" fill="url(#sweepg)"/>
 </g>
