@@ -1,0 +1,80 @@
+name: Issue a visa stamp
+
+on:
+  issues:
+    types: [opened]
+
+concurrency:
+  group: profile-write
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  id-token: write
+  attestations: write
+
+jobs:
+  stamp:
+    if: startsWith(github.event.issue.title, 'stamp') || startsWith(github.event.issue.title, 'Stamp')
+    runs-on: ubuntu-latest
+    env:
+      LOGIN: ${{ github.event.issue.user.login }}
+      NUMBER: ${{ github.event.issue.number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install fonttools==4.60.1 pillow==11.3.0
+
+      - name: Issue stamp
+        id: issue
+        run: |
+          python .github/scripts/build.py stamp --login "$LOGIN" > entry.json
+          echo "serial=$(python -c 'import json; print(json.load(open("entry.json"))["serial"])')" >> "$GITHUB_OUTPUT"
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stamps assets/generated
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(stamps): stamp $LOGIN [skip ci]"
+            for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
+          fi
+
+      - name: Sign the stamp
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: stamps/${{ github.event.issue.user.login }}.json
+
+      - name: Reply and close
+        run: |
+          RAW="https://raw.githubusercontent.com/$REPO/main/stamps/$LOGIN"
+          SERIAL=$(printf '%04d' "${{ steps.issue.outputs.serial }}")
+          cat > body.md <<MD
+          Stamped. You are visitor **No. $SERIAL**.
+
+          <img src="$RAW.svg" width="220" alt="Visa stamp No. $SERIAL for $LOGIN" />
+
+          Put it in your own README:
+
+          \`\`\`md
+          [![Verified by ${REPO%%/*}]($RAW.svg)](https://github.com/${REPO%%/*})
+          \`\`\`
+
+          Don't trust it. Verify it:
+
+          \`\`\`bash
+          curl -sLO $RAW.json
+          gh attestation verify $LOGIN.json -R $REPO
+          \`\`\`
+          MD
+          sed -i 's/^          //' body.md
+          gh issue comment "$NUMBER" -R "$REPO" --body-file body.md
+          gh issue close "$NUMBER" -R "$REPO" --reason completed

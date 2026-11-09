@@ -1,0 +1,5 @@
+# local design tooling scratch
+.impeccable/*
+!.impeccable/surfaces/
+!.impeccable/design.json
+__pycache__/

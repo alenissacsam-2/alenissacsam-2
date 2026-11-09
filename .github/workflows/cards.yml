@@ -1,27 +1,30 @@
-name: Rebuild profile cards
+name: Build and sign the passport
 
 on:
   schedule:
-    # Daily at 04:17 UTC. Off-the-hour so it isn't queued behind the crowd.
-    - cron: "17 4 * * *"
+    - cron: "17 4 * * *"   # daily, off the hour
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - ".github/scripts/build_cards.py"
+      - "README.md"
+      - ".github/scripts/**"
       - ".github/workflows/cards.yml"
+      - "assets/fonts/**"
 
-# Never let a scheduled run and a manual run push at the same time.
+# Shared with stamp.yml so two runs never push at once.
 concurrency:
-  group: profile-cards
+  group: profile-write
   cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write      # Sigstore keyless signing
+  attestations: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
       - uses: actions/checkout@v4
 
@@ -29,19 +32,27 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Render cards
+      - run: pip install fonttools==4.60.1 pillow==11.3.0
+
+      - name: Render passport, visas, log, registry and seal
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python .github/scripts/build_cards.py
+        run: python .github/scripts/build.py
 
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/generated
+          git add README.md assets/generated
           if git diff --staged --quiet; then
-            echo "cards unchanged - nothing to commit"
-            exit 0
+            echo "nothing changed"
+          else
+            git commit -m "chore(passport): rebuild [skip ci]"
+            git push
           fi
-          git commit -m "chore(cards): refresh profile telemetry [skip ci]"
-          git push
+
+      # The passport's document number is this file's SHA-256; this signs it.
+      - name: Sign README
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: README.md

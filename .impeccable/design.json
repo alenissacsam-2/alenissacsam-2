@@ -1,0 +1,648 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-09T18:26:19+00:00",
+  "title": "Design System: Signed Passport",
+  "extensions": {
+    "colorMeta": {
+      "day-paper": {
+        "role": "neutral",
+        "displayName": "Security Paper",
+        "canonical": "#E8EEEC",
+        "tonalRamp": [
+          "#0A0B0B",
+          "#222424",
+          "#3D403F",
+          "#5B5F5D",
+          "#797F7D",
+          "#9BA09E",
+          "#C1C5C4",
+          "#ECEFEE"
+        ]
+      },
+      "day-paper-2": {
+        "role": "neutral",
+        "displayName": "Photo Tint",
+        "canonical": "#DDE6E3",
+        "tonalRamp": [
+          "#0A0C0B",
+          "#222524",
+          "#3C413F",
+          "#595F5D",
+          "#777F7D",
+          "#99A09E",
+          "#C0C5C4",
+          "#EBEFEE"
+        ]
+      },
+      "day-ink": {
+        "role": "primary",
+        "displayName": "Intaglio Navy",
+        "canonical": "#13213A",
+        "tonalRamp": [
+          "#080B11",
+          "#1E2430",
+          "#364051",
+          "#505E76",
+          "#6C7E9C",
+          "#909FBA",
+          "#B8C5DA",
+          "#E6EFFE"
+        ]
+      },
+      "day-label": {
+        "role": "neutral",
+        "displayName": "Field Label Slate",
+        "canonical": "#4C5E6E",
+        "tonalRamp": [
+          "#080C0F",
+          "#1E252B",
+          "#37414B",
+          "#51606D",
+          "#6D8090",
+          "#90A1B0",
+          "#B9C6D2",
+          "#E7F0F8"
+        ]
+      },
+      "day-guilloche-teal": {
+        "role": "tertiary",
+        "displayName": "Guilloché Teal",
+        "canonical": "#2E8B82",
+        "tonalRamp": [
+          "#010E0D",
+          "#072A27",
+          "#154944",
+          "#246A63",
+          "#348E85",
+          "#67ADA5",
+          "#9BD1C9",
+          "#D3F7F2"
+        ]
+      },
+      "day-guilloche-lavender": {
+        "role": "tertiary",
+        "displayName": "Guilloché Lavender",
+        "canonical": "#8C79B6",
+        "tonalRamp": [
+          "#0C0915",
+          "#261F36",
+          "#43395B",
+          "#635482",
+          "#8471AD",
+          "#A494C9",
+          "#C8BCE7",
+          "#F1E9FF"
+        ]
+      },
+      "day-serial-red": {
+        "role": "secondary",
+        "displayName": "Serial Red",
+        "canonical": "#C42F2A",
+        "tonalRamp": [
+          "#1C0202",
+          "#450D0A",
+          "#711E19",
+          "#A13029",
+          "#D4433B",
+          "#F07367",
+          "#FFA599",
+          "#FFDAD1"
+        ]
+      },
+      "day-edge": {
+        "role": "neutral",
+        "displayName": "Edge",
+        "canonical": "#C5D2CE",
+        "tonalRamp": [
+          "#090C0B",
+          "#212524",
+          "#3B413F",
+          "#57605D",
+          "#75807D",
+          "#97A19E",
+          "#BEC6C4",
+          "#EAF0EE"
+        ]
+      },
+      "day-cover": {
+        "role": "neutral",
+        "displayName": "Cover Navy",
+        "canonical": "#16243F",
+        "tonalRamp": [
+          "#080B12",
+          "#1E2430",
+          "#364052",
+          "#505E77",
+          "#6C7E9E",
+          "#8F9FBC",
+          "#B8C5DC",
+          "#E6EFFF"
+        ]
+      },
+      "day-stamp-blue": {
+        "role": "tertiary",
+        "displayName": "Day Stamp Blue",
+        "canonical": "#1F4FA8",
+        "tonalRamp": [
+          "#030A1D",
+          "#102345",
+          "#213E72",
+          "#345BA2",
+          "#487AD5",
+          "#719EEE",
+          "#A0C5FF",
+          "#D6F0FF"
+        ]
+      },
+      "day-stamp-violet": {
+        "role": "tertiary",
+        "displayName": "Day Stamp Violet",
+        "canonical": "#5B3C9E",
+        "tonalRamp": [
+          "#0C071B",
+          "#261C42",
+          "#43336D",
+          "#624D9B",
+          "#8368CC",
+          "#A38EE6",
+          "#C7B8FE",
+          "#F0E7FF"
+        ]
+      },
+      "day-stamp-green": {
+        "role": "tertiary",
+        "displayName": "Day Stamp Green",
+        "canonical": "#1E7A55",
+        "tonalRamp": [
+          "#010F07",
+          "#0A2B1D",
+          "#194A35",
+          "#2A6C4F",
+          "#3B906A",
+          "#6BAF8D",
+          "#9ED2B7",
+          "#D5F9E5"
+        ]
+      },
+      "day-stamp-umber": {
+        "role": "tertiary",
+        "displayName": "Day Stamp Umber",
+        "canonical": "#A8531C",
+        "tonalRamp": [
+          "#170601",
+          "#3A1A07",
+          "#613113",
+          "#8C4921",
+          "#B86330",
+          "#D58960",
+          "#F2B494",
+          "#FFE4CE"
+        ]
+      },
+      "uv-paper": {
+        "role": "neutral",
+        "displayName": "UV Blue-Black",
+        "canonical": "#0B0A1A",
+        "tonalRamp": [
+          "#0B0B0F",
+          "#23232B",
+          "#3E3E4B",
+          "#5C5C6D",
+          "#7B7B91",
+          "#9C9CB0",
+          "#C2C2D2",
+          "#EDEDF8"
+        ]
+      },
+      "uv-paper-2": {
+        "role": "neutral",
+        "displayName": "Photo Tint (UV)",
+        "canonical": "#121129",
+        "tonalRamp": [
+          "#0A0A11",
+          "#22232E",
+          "#3D3E4F",
+          "#5A5B73",
+          "#797A99",
+          "#9A9CB7",
+          "#C1C2D8",
+          "#ECEDFD"
+        ]
+      },
+      "uv-ink": {
+        "role": "primary",
+        "displayName": "UV Ghost White",
+        "canonical": "#E6E8FF",
+        "tonalRamp": [
+          "#0A0B0F",
+          "#23232B",
+          "#3E3F4A",
+          "#5B5C6C",
+          "#7A7B90",
+          "#9B9DAF",
+          "#C2C3D1",
+          "#EDEEF8"
+        ]
+      },
+      "uv-label": {
+        "role": "neutral",
+        "displayName": "Field Label Slate (UV)",
+        "canonical": "#9296CC",
+        "tonalRamp": [
+          "#090A14",
+          "#212235",
+          "#3B3D5A",
+          "#575981",
+          "#7578AB",
+          "#969AC8",
+          "#BDC1E6",
+          "#EAECFF"
+        ]
+      },
+      "uv-fluor-mint": {
+        "role": "tertiary",
+        "displayName": "UV Mint",
+        "canonical": "#5CF2C8",
+        "tonalRamp": [
+          "#001009",
+          "#002D20",
+          "#004E39",
+          "#007155",
+          "#009772",
+          "#3BB695",
+          "#84D8BC",
+          "#C5FDE9"
+        ]
+      },
+      "uv-fluor-periwinkle": {
+        "role": "tertiary",
+        "displayName": "UV Periwinkle",
+        "canonical": "#7FA8FF",
+        "tonalRamp": [
+          "#040A1B",
+          "#152341",
+          "#283E6C",
+          "#3E5B9B",
+          "#557ACB",
+          "#7B9DE5",
+          "#A8C4FD",
+          "#DBEFFF"
+        ]
+      },
+      "uv-fluor-vermilion": {
+        "role": "secondary",
+        "displayName": "Fluorescent Vermilion",
+        "canonical": "#FF6B4A",
+        "tonalRamp": [
+          "#1C0200",
+          "#440E03",
+          "#711F0C",
+          "#A13218",
+          "#D44525",
+          "#F07559",
+          "#FFA78F",
+          "#FFDBCA"
+        ]
+      },
+      "uv-fluor-pink": {
+        "role": "tertiary",
+        "displayName": "UV Fluor Pink",
+        "canonical": "#FF5FA8",
+        "tonalRamp": [
+          "#1C010C",
+          "#440826",
+          "#701643",
+          "#9F2562",
+          "#D23682",
+          "#EE6AA3",
+          "#FF9FC8",
+          "#FFD6F1"
+        ]
+      },
+      "uv-fluor-violet": {
+        "role": "tertiary",
+        "displayName": "UV Fluor Violet",
+        "canonical": "#C79BFF",
+        "tonalRamp": [
+          "#0F0619",
+          "#2B1B3E",
+          "#4A3267",
+          "#6C4A93",
+          "#8F65C2",
+          "#AE8BDD",
+          "#D1B5F7",
+          "#F7E5FF"
+        ]
+      },
+      "uv-fluor-amber": {
+        "role": "tertiary",
+        "displayName": "UV Fluor Amber",
+        "canonical": "#FFB04A",
+        "tonalRamp": [
+          "#160700",
+          "#381D00",
+          "#5E3500",
+          "#874E00",
+          "#B36A00",
+          "#CF8F3E",
+          "#ECB97F",
+          "#FFE8C0"
+        ]
+      },
+      "uv-fibre-yellow": {
+        "role": "tertiary",
+        "displayName": "UV Fibre Yellow",
+        "canonical": "#FFE45C",
+        "tonalRamp": [
+          "#100B00",
+          "#2D2300",
+          "#4E3F00",
+          "#715C00",
+          "#967C00",
+          "#B49E2C",
+          "#D5C577",
+          "#FAF0BB"
+        ]
+      },
+      "uv-edge": {
+        "role": "neutral",
+        "displayName": "Edge (UV)",
+        "canonical": "#2C2856",
+        "tonalRamp": [
+          "#0A0A14",
+          "#222135",
+          "#3D3C5A",
+          "#595981",
+          "#7877AB",
+          "#9999C7",
+          "#C0C0E5",
+          "#EBECFF"
+        ]
+      },
+      "uv-portrait": {
+        "role": "neutral",
+        "displayName": "UV Portrait",
+        "canonical": "#4A4785",
+        "tonalRamp": [
+          "#0A0917",
+          "#212139",
+          "#3B3B60",
+          "#58578A",
+          "#7675B6",
+          "#9798D2",
+          "#BEBFEE",
+          "#EAEBFF"
+        ]
+      },
+      "uv-cover": {
+        "role": "neutral",
+        "displayName": "Cover Navy (UV)",
+        "canonical": "#0F1530",
+        "tonalRamp": [
+          "#090B12",
+          "#202330",
+          "#393F52",
+          "#555D77",
+          "#727C9E",
+          "#949DBB",
+          "#BCC3DC",
+          "#E8EEFF"
+        ]
+      },
+      "emboss-light": {
+        "role": "neutral",
+        "displayName": "Emboss Light",
+        "canonical": "#E9EEF7",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#222427",
+          "#3D4044",
+          "#5A5E64",
+          "#797D85",
+          "#9B9FA6",
+          "#C1C4CA",
+          "#ECEEF2"
+        ]
+      },
+      "emboss-mid": {
+        "role": "neutral",
+        "displayName": "Emboss Mid",
+        "canonical": "#AEB8CC",
+        "tonalRamp": [
+          "#090B0F",
+          "#21242B",
+          "#3B404A",
+          "#575E6C",
+          "#747D90",
+          "#969FAF",
+          "#BEC4D1",
+          "#EAEFF8"
+        ]
+      },
+      "emboss-dark": {
+        "role": "neutral",
+        "displayName": "Emboss Dark",
+        "canonical": "#6C7894",
+        "tonalRamp": [
+          "#090B11",
+          "#1F242E",
+          "#39404F",
+          "#545D73",
+          "#717D99",
+          "#949EB7",
+          "#BBC4D8",
+          "#E8EEFD"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "cover-display": {
+        "displayName": "Cover Display",
+        "purpose": "Cover wordmark only, emboss gradient fill."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Surname, given names, registry count."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Data-page PASSPORT header; same face for VERIFIED and visa titles."
+      },
+      "value": {
+        "displayName": "Value",
+        "purpose": "Field values (wght 760 / wdth 100)."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase expanded field captions."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "The only sentence-case running text."
+      },
+      "mrz": {
+        "displayName": "Mrz",
+        "purpose": "Two ICAO lines at full measure."
+      },
+      "serial": {
+        "displayName": "Serial",
+        "purpose": "Stamp dates, visitor serials, hashes."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-arrive",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Expo ease-out for anything that lands: field rise (0.7s, 9 units), VERIFIED thunk (0.42s from scale 1.6). Passport only."
+      },
+      {
+        "name": "ease-cover-swing",
+        "value": "cubic-bezier(.55,0,.75,.35)",
+        "purpose": "Accelerating swing of the cover opening (1.05s from 0.45s). Passport only."
+      },
+      {
+        "name": "guilloche-fade",
+        "value": "0.5s ease-out",
+        "purpose": "Guilloche copies fade in, staggered 0.035s. Passport only."
+      },
+      {
+        "name": "mrz-print",
+        "value": "1.1s steps(44,end)",
+        "purpose": "MRZ types on one character per step; scan bar sweeps linearly alongside. Passport only."
+      },
+      {
+        "name": "foil-drift",
+        "value": "7s ease-in-out infinite alternate",
+        "purpose": "Holographic foil drifts across the portrait patch. Passport only."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion:reduce){*{animation:none!important}}",
+        "purpose": "Shipped in every SVG by finish()."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Data Field",
+      "kind": "custom",
+      "refersTo": "data-field-label",
+      "description": "Expanded caps caption over a heavy value; the passport's basic unit.",
+      "html": "<div class=\"ds-field\"><span class=\"ds-field-label\">GIVEN NAMES</span><span class=\"ds-field-value\">ALEN ISSAC</span></div>",
+      "css": ".ds-field{display:inline-flex;flex-direction:column;gap:4px;padding:16px;background:#E8EEEC}.ds-field-label{font-family:Archivo,'Segoe UI',sans-serif;font-size:14.5px;font-weight:600;font-stretch:125%;letter-spacing:1.4px;color:#4C5E6E}.ds-field-value{font-family:Archivo,'Segoe UI',sans-serif;font-size:21px;font-weight:760;color:#13213A}"
+    },
+    {
+      "name": "Data Field (UV)",
+      "kind": "custom",
+      "refersTo": "data-field-value-uv",
+      "description": "The same field under the UV lamp; validity value in fluorescent vermilion.",
+      "html": "<div class=\"ds-field-uv\"><span class=\"ds-field-uv-label\">VALID UNTIL</span><span class=\"ds-field-uv-value\">DISPROVEN</span></div>",
+      "css": ".ds-field-uv{display:inline-flex;flex-direction:column;gap:4px;padding:16px;background:#0B0A1A}.ds-field-uv-label{font-family:Archivo,'Segoe UI',sans-serif;font-size:14.5px;font-weight:600;font-stretch:125%;letter-spacing:1.4px;color:#9296CC}.ds-field-uv-value{font-family:Archivo,'Segoe UI',sans-serif;font-size:21px;font-weight:760;color:#FF6B4A}"
+    },
+    {
+      "name": "VERIFIED Stamp",
+      "kind": "custom",
+      "refersTo": "verified-stamp",
+      "description": "Double-framed red validity stamp, rotated -9 degrees; lands last with an expo ease-out thunk.",
+      "html": "<div class=\"ds-verified\"><div class=\"ds-verified-inner\"><b>VERIFIED</b><small>SIGSTORE / 09 NOV 2026</small></div></div>",
+      "css": ".ds-verified{display:inline-block;padding:8px;border:4.5px solid #C42F2A;border-radius:12px;transform:rotate(-9deg);opacity:.88;color:#C42F2A;animation:ds-thunk .42s cubic-bezier(.16,1,.3,1) both}.ds-verified-inner{border:1.6px solid #C42F2A;border-radius:7px;padding:10px 24px;text-align:center;font-family:Archivo,'Segoe UI',sans-serif}.ds-verified-inner b{display:block;font-size:38px;font-weight:800;letter-spacing:4px}.ds-verified-inner small{font-size:11px;font-weight:600;font-stretch:125%;letter-spacing:2.2px}@keyframes ds-thunk{from{opacity:0;transform:scale(1.6) rotate(-6deg)}}@media (prefers-reduced-motion:reduce){.ds-verified{animation:none}}"
+    },
+    {
+      "name": "Visa Stamp (round)",
+      "kind": "custom",
+      "refersTo": "visa-stamp",
+      "description": "Project stamp: one stamp ink, real stamp silhouette, static.",
+      "html": "<div class=\"ds-visa\"><span class=\"ds-visa-port\">ALGORAND</span><b>IDENTITY</b><span class=\"ds-visa-date\">02 DEC 2025</span><span class=\"ds-visa-port\">PYTEAL / REACT</span></div>",
+      "css": ".ds-visa{width:200px;height:200px;border-radius:50%;border:5px solid #1F4FA8;outline:1.4px solid #1F4FA8;outline-offset:-22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#1F4FA8;transform:rotate(-4deg);opacity:.92}.ds-visa b{font-family:Archivo,'Segoe UI',sans-serif;font-size:26px;font-weight:800;letter-spacing:1.5px}.ds-visa-port{font-family:Archivo,'Segoe UI',sans-serif;font-size:11px;font-weight:600;font-stretch:125%;letter-spacing:2px}.ds-visa-date{font-family:'Azeret Mono',monospace;font-size:13px;font-weight:500}"
+    },
+    {
+      "name": "MRZ",
+      "kind": "custom",
+      "refersTo": "mrz",
+      "description": "Machine-readable zone: mono, full measure, under a hairline.",
+      "html": "<div class=\"ds-mrz\">P&lt;UTOSAM&lt;&lt;ALEN&lt;ISSAC&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>",
+      "css": ".ds-mrz{font-family:'Azeret Mono',monospace;font-weight:500;font-size:18px;letter-spacing:.12em;color:#13213A;background:#E8EEEC;border-top:1px solid #C5D2CE;padding:16px;white-space:nowrap;overflow:hidden}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Signed Passport",
+    "overview": "Every surface is a page of one security-printed travel document. The data page, the visa stamps, the perforated entry log and the visitor registry are all things a passport physically carries: intaglio ink on tinted security paper, guilloché hairlines, rubber-stamp impressions, laser perforation, a machine-readable zone. Nothing is a card, a widget or a badge. The document is the container; everything else is printed on it or stamped into it.\n\nThe system has two lighting states rather than a light and a dark theme. **Daylight** is the document as printed. **UV** is the same document under a 365nm inspection lamp: the paper goes blue-black, security inks fluoresce, fibres and a hidden rosette appear that daylight does not show. Both are generated from the same code path with a swapped palette (`DAY` / `UV` in `.github/scripts/build.py`), so the two states must always carry identical content and geometry.\n\nAll sizes are SVG viewBox units (1 unit = 1px at the asset's native width: passport 1200x760, log 1200x330, registry 1200x220, visa 400x300). GitHub scales the whole image to the column, so type size is relative to the artboard, not to the reader's root font size.",
+    "keyCharacteristics": [
+      "One document, two lights: Daylight palette for light mode, UV palette for dark mode, swapped by `<picture>`.",
+      "Hairline and ink, never boxes: structure comes from 1px rules, guilloché, perforation and stamp outlines.",
+      "Expanded caps labels over heavy values, monospace for anything a machine would read.",
+      "Rubber-stamp impressions are procedurally imperfect (bleed, speckle, uneven pressure, occasional double strike).",
+      "One motion moment: only the passport animates."
+    ],
+    "rules": [
+      {
+        "name": "The Two Lights Rule",
+        "body": "Every colour role exists in both DAY and UV. A new surface adds a key to both dicts or to neither; never hardcode a colour into one light.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red Means Valid Rule",
+        "body": "Serial red marks only claims about the document's validity (document number, VALID UNTIL, VERIFIED, scan bar) and the first stamp ink. It is never decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The UV Reveals Rule",
+        "body": "Fibres, the hidden pink rosette and the strong ghost portrait (opacity 0.75 UV vs 0.16 day) exist only under UV. Daylight never shows them.",
+        "section": "colors"
+      },
+      {
+        "name": "The Machine Reads Mono Rule",
+        "body": "Hashes, serials, dates on stamps, MRZ and the document number are Azeret Mono. Human-facing names and values are Archivo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Caption Above Value Rule",
+        "body": "A field is a label-face caption in label colour, then the value baseline at caption y + size + 4. Labels are always uppercase and expanded (wdth 125).",
+        "section": "typography"
+      },
+      {
+        "name": "The Fit By Shrinking Rule",
+        "body": "Stamp text never wraps or truncates; it steps the font size down (0.5 for labels, 1 for titles) using real glyph advances from the instanced font until it fits the stamp's room.",
+        "section": "typography"
+      },
+      {
+        "name": "The Printed Depth Rule",
+        "body": "Depth comes from ink, paper and cuts (gutter gradient, engraving, perforation mask). Never add drop shadows or blurs.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Objects Have Corners Rule",
+        "body": "Radius belongs only to a physical document object (document, photo window, stamp frame). Never round a layout region, panel or text block.",
+        "section": "shapes"
+      },
+      {
+        "name": "The One Motion Moment Rule",
+        "body": "Only the passport animates. Visas, log and registry ship with empty CSS and stay static.",
+        "section": "components"
+      },
+      {
+        "name": "The Expo Landing Rule",
+        "body": "Things that arrive (fields, stamps) use `cubic-bezier(.16,1,.3,1)`. Only the cover's swing accelerates, because a cover falls open.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** add every new colour role to both DAY and UV in `build.py`.",
+      "**Do** set field captions in Archivo wght 600 / wdth 125 at 14.5 with 1.4 spacing, and values in the heavy Archivo instances.",
+      "**Do** put hashes, serials, dates on stamps and machine lines in Azeret Mono 500.",
+      "**Do** pass every new stamp through `ink()` with a stable seed.",
+      "**Do** fit stamp text by shrinking against measured glyph advances, never by wrapping or ellipsis.",
+      "**Do** keep `prefers-reduced-motion` off-switching in every SVG via `finish()`."
+    ],
+    "donts": [
+      "**Don't** animate anything except the passport.",
+      "**Don't** use drop shadows, blurs or glass; depth is printed.",
+      "**Don't** put radius on anything that is not a physical document object.",
+      "**Don't** wrap content in cards, chips or badge rows; use hairline rules and the document itself.",
+      "**Don't** use serial red for decoration; it marks validity.",
+      "**Don't** show UV-only features (fibres, hidden rosette, strong ghost portrait) in daylight."
+    ]
+  }
+}
