@@ -377,20 +377,25 @@ def rose(cx, cy, r0, a, n, b, m, phi, steps=720):
     return poly(pts)
 
 
-def rosette(rng: random.Random, cx, cy, scale, ida, idb, c1, c2, sw, copies=(22, 16), delay=1.15):
+def rosette(rng: random.Random, cx, cy, scale, ida, idb, c1, c2, sw, copies=(22, 16), delay=1.15, spin=False):
     """Two moiré rings, each one curve repeated with a small rotation."""
     n1, n2 = rng.choice([9, 10, 11, 12, 13]), rng.choice([17, 19, 21, 23])
     d1 = rose(cx, cy, 92 * scale, 18 * scale, n1, 5 * scale, n1 * 3, rng.uniform(0, 6.28))
     d2 = rose(cx, cy, 50 * scale, 10 * scale, n2 // 2, 4 * scale, n2, rng.uniform(0, 6.28))
     out = [f'<defs><path id="{ida}" d="{d1}"/><path id="{idb}" d="{d2}"/></defs>']
+    # counter-rotating rings make the moire drift, the way a real guilloche shifts as you tilt it
+    out.append(f'<g style="transform-origin:{cx}px {cy}px;animation:spin 160s linear infinite">' if spin else "<g>")
     for k in range(copies[0]):
         out.append(f'<use href="#{ida}" transform="rotate({f1(k * 360 / n1 / copies[0])} {cx} {cy})" '
                    f'fill="none" stroke="{c1}" stroke-width="{sw}" class="wv" '
                    f'style="animation-delay:{delay + k * .035:.3f}s"/>')
+    out.append("</g>")
+    out.append(f'<g style="transform-origin:{cx}px {cy}px;animation:spin 110s linear infinite reverse">' if spin else "<g>")
     for k in range(copies[1]):
         out.append(f'<use href="#{idb}" transform="rotate({f1(k * 360 / n2 / copies[1])} {cx} {cy})" '
                    f'fill="none" stroke="{c2}" stroke-width="{sw}" class="wv" '
                    f'style="animation-delay:{delay + .4 + k * .035:.3f}s"/>')
+    out.append("</g>")
     return "".join(out)
 
 
@@ -404,7 +409,8 @@ def fibres(rng: random.Random, w, h, n=70) -> str:
         L = rng.uniform(7, 16)
         x2, y2 = x + L * math.cos(a), y + L * math.sin(a)
         cx, cy = (x + x2) / 2 + rng.uniform(-4, 4), (y + y2) / 2 + rng.uniform(-4, 4)
-        out.append(f'<path d="M{f1(x)} {f1(y)}Q{f1(cx)} {f1(cy)} {f1(x2)} {f1(y2)}" '
+        tw = f' class="tw" style="animation-delay:{rng.uniform(0, 4):.1f}s"' if rng.random() < .22 else ""
+        out.append(f'<path{tw} d="M{f1(x)} {f1(y)}Q{f1(cx)} {f1(cy)} {f1(x2)} {f1(y2)}" '
                    f'stroke="{rng.choice(cols)}" stroke-width="1.1" fill="none" opacity="{rng.uniform(.55, .95):.2f}"/>')
     return "".join(out)
 
@@ -450,8 +456,11 @@ PASSPORT_CSS = """
 @keyframes shade{to{opacity:.75}}
 #mrzclip rect{animation:print 1.1s steps(44,end) 2.05s both}
 @keyframes print{from{transform:scaleX(0)}}
-#scan{animation:scan 1.1s linear 2.05s both}
-@keyframes scan{from{transform:translateX(0);opacity:1}99%{opacity:1}to{transform:translateX(1064px);opacity:0}}
+#scan{animation:scan 9s linear 2.05s infinite both}
+@keyframes scan{0%{transform:translateX(0);opacity:1}12%{transform:translateX(1064px);opacity:1}12.1%,100%{transform:translateX(1064px);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tw{animation:tw 3.4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.12}}
 #stampin{transform-box:fill-box;transform-origin:center;animation:thunk .42s cubic-bezier(.16,1,.3,1) 3.25s both}
 @keyframes thunk{from{opacity:0;transform:scale(1.6) rotate(3deg)}}
 #foil{animation:foil 7s ease-in-out 1.6s infinite alternate both}
@@ -532,7 +541,7 @@ def render_passport(d: dict, t: dict, doc_hash: str, portrait: str) -> str:
     b.append(field(604, 512, "SIGNATURE", "SIGSTORE / REKOR", 21, 1.7))
 
     # rosette + secondary ghost portrait
-    b.append(rosette(rng, 968, 300, 1.08, "ra", "rb", t["line"], t["line2"], .65))
+    b.append(rosette(rng, 968, 300, 1.08, "ra", "rb", t["line"], t["line2"], .65, spin=True))
     b.append(f'<circle cx="968" cy="300" r="22" fill="{t["paper"]}"/>'
              f'<text x="968" y="307" text-anchor="middle" class="fv" font-size="19" letter-spacing="1" fill="{t["ink"]}">AIS</text>')
     if portrait:
@@ -642,52 +651,100 @@ def render_visa(i: int, repo: dict | None, name: str, title: str, port: str, sta
              f'opacity=".16">{strike}</g>') if rng.random() < .34 else ""  # stamp bounced: a faint second strike
     body = (f"<defs>{defs}</defs><g {attrs} fill=\"none\" stroke=\"{c}\" opacity=\".92\">{ghost}"
             f'<g transform="rotate({rot:.1f} {cx} {cy})">{strike}</g></g>')
-    return finish(body, W, H, f"Visa stamp: {name}, {title.title()} on {port.title()}, entered {date}", "")
+    body = f'<g class="ink" style="animation-delay:{.2 + i * .16:.2f}s">{body}</g>'
+    css = STAMP_CSS + (".ink>g{animation:glow 5s ease-in-out infinite alternate}@keyframes glow{from{opacity:.7}}" if t["name"] == "uv" else "")
+    return finish(body, W, H, f"Visa stamp: {name}, {title.title()} on {port.title()}, entered {date}", css)
 
 
 # ---------------------------------------------------------------- entry log (contribution perforation)
 
-LOG_CSS = ""  # below the fold: the passport owns the page's one motion moment
+LOG_CSS = """
+.ln{animation:draw 2.6s cubic-bezier(.16,1,.3,1) both}
+@keyframes draw{from{stroke-dasharray:var(--L);stroke-dashoffset:var(--L)}to{stroke-dasharray:var(--L);stroke-dashoffset:0}}
+#lamp{animation:lamp 7s cubic-bezier(.45,0,.55,1) 2.8s infinite both}
+@keyframes lamp{from{transform:translateX(-160px)}to{transform:translateX(940px)}}
+.pk{animation:pk .5s cubic-bezier(.16,1,.3,1) 2.4s both}
+@keyframes pk{from{opacity:0;transform:translateY(6px)}}
+.now{transform-box:fill-box;transform-origin:center;animation:now 2.4s ease-out infinite}
+@keyframes now{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+"""
 
 
 def render_log(d: dict, t: dict) -> str:
+    """The year as one engraved guilloche band: calm where nothing shipped, swelling where it did."""
     W, H = 1200, 330
     b = []
 
-    def field(x, y, label, value, delay):
-        return (f'<g class="up" style="animation-delay:{delay}s"><text x="{x}" y="{y}" class="fl" font-size="14.5" letter-spacing="1.4" fill="{t["label"]}">{label}</text>'
-                f'<text x="{x}" y="{y + 34}" class="fv" font-size="26" fill="{t["ink"]}">{esc(value)}</text></g>')
+    def field(x, y, label, value):
+        return (f'<text x="{x}" y="{y}" class="fl" font-size="14.5" letter-spacing="1.4" fill="{t["label"]}">{label}</text>'
+                f'<text x="{x}" y="{y + 32}" class="fv" font-size="26" fill="{t["ink"]}">{esc(value)}</text>')
 
-    b.append(field(40, 52, "ENTRIES, LAST 12 MONTHS", f"{d['total']:,}", .05))
-    b.append(field(40, 128, "LONGEST STAY", f"{d['longest']} DAY{'S' if d['longest'] != 1 else ''}", .1))
-    b.append(field(40, 204, "CURRENT STAY", f"{d['current']} DAY{'S' if d['current'] != 1 else ''}", .15))
-    langs = d["langs"] or ["-"]
-    b.append(f'<g class="up" style="animation-delay:.2s"><text x="40" y="280" class="fl" font-size="14.5" letter-spacing="1.4" fill="{t["label"]}">LANGUAGES SPOKEN</text>'
-             f'<text x="40" y="306" class="fb" font-size="17" fill="{t["ink"]}">{esc(", ".join(langs))}</text></g>')
-
-    counts = sorted(c["contributionCount"] for w in d["weeks"] for c in w["contributionDays"] if c["contributionCount"])
-    q = [counts[int(len(counts) * f)] for f in (.25, .5, .75)] if counts else [1, 2, 3]
-    x0, y0, pitch = 372, 44, 14.9
-    month_seen = set()
-    for wi, w in enumerate(d["weeks"]):
-        for c in w["contributionDays"]:
-            day = dt.date.fromisoformat(c["date"])
-            dow = (day.weekday() + 1) % 7
-            n = c["contributionCount"]
-            lvl = 0 if n == 0 else 1 + sum(n > v for v in q)
-            r = [0.9, 2.4, 3.3, 4.2, 5.1][lvl]
-            op = .35 if lvl == 0 else 1
-            b.append(f'<circle class="h" style="animation-delay:{.25 + wi * .022:.3f}s" cx="{f1(x0 + wi * pitch)}" cy="{f1(y0 + dow * pitch * 1.42)}" r="{r}" fill="{t["dot"]}" opacity="{op}"/>')
-            if day.day <= 7 and dow == 0 and (day.month, day.year) not in month_seen:
-                month_seen.add((day.month, day.year))
-                b.append(f'<text x="{f1(x0 + wi * pitch - 4)}" y="{f1(y0 + 7 * pitch * 1.42 + 12)}" class="fl" font-size="11" letter-spacing="1.4" fill="{t["label"]}">{day.strftime("%b").upper()}</text>')
+    b.append(field(40, 52, "ENTRIES, LAST 12 MONTHS", f"{d['total']:,}"))
+    b.append(field(40, 126, "LONGEST STAY", f"{d['longest']} DAY{'S' if d['longest'] != 1 else ''}"))
+    b.append(field(40, 200, "CURRENT STAY", f"{d['current']} DAY{'S' if d['current'] != 1 else ''}"))
+    b.append(f'<text x="40" y="274" class="fl" font-size="14.5" letter-spacing="1.4" fill="{t["label"]}">LANGUAGES SPOKEN</text>'
+             f'<text x="40" y="300" class="fb" font-size="17" fill="{t["ink"]}">{esc(", ".join(d["langs"] or ["-"]))}</text>')
     b.append(f'<line x1="340" y1="40" x2="340" y2="306" stroke="{t["edge"]}"/>')
-    return finish("".join(b), W, H, f"Entry log: {d['total']} contributions in the last year, longest streak {d['longest']} days, current streak {d['current']} days.", LOG_CSS)
+
+    days = sorted((c for w in d["weeks"] for c in w["contributionDays"]), key=lambda c: c["date"])
+    n = len(days) or 1
+    raw = [c["contributionCount"] for c in days] or [0]
+    sig = 2.6  # gaussian smoothing in days, so single commits read as swells, not spikes
+    ker = [math.exp(-(k * k) / (2 * sig * sig)) for k in range(-8, 9)]
+    sm = [sum(raw[i + k - 8] * ker[k] for k in range(17) if 0 <= i + k - 8 < n) for i in range(n)]
+    top = max(sm) or 1
+    x0, x1, cy = 380, 1160, 150
+    step = (x1 - x0) / max(n - 1, 1)
+    amp = [6 + 68 * (v / top) ** .75 for v in sm]
+
+    lines = 12
+    paths = []
+    for k in range(lines):
+        ph = 2 * math.pi * k / lines
+        pts = [(x0 + i * step, cy + amp[i] * math.sin(i * step / 15 + ph)) for i in range(n)]
+        paths.append(("M" + "L".join(f"{f1(x)} {f1(y)}" for x, y in pts),
+                      sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1))))
+    band = "".join(f'<path d="{pth}" class="ln" style="--L:{L:.0f};animation-delay:{.1 + k * .05:.2f}s"/>'
+                   for k, (pth, L) in enumerate(paths))
+    b.append(f'<g fill="none" stroke="{t["line"]}" stroke-width=".9" opacity=".6">{band}</g>')
+    # the inspection lamp: a brighter copy of the band, visible only inside a sweeping window
+    lamp_ink = t["line2"] if t["name"] == "uv" else t["ink"]
+    b.append(f'<defs><linearGradient id="lg"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff"/>'
+             f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+             f'<mask id="lm" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}"><rect id="lamp" x="{x0}" y="40" width="160" height="230" fill="url(#lg)"/></mask></defs>'
+             f'<g mask="url(#lm)" fill="none" stroke="{lamp_ink}" stroke-width="1.2">'
+             + "".join(f'<path d="{pth}"/>' for pth, _ in paths) + "</g>")
+
+    # month rule
+    seen = set()
+    for i, c in enumerate(days):
+        day = dt.date.fromisoformat(c["date"])
+        if day.day == 1 and (day.year, day.month) not in seen:
+            seen.add((day.year, day.month))
+            x = x0 + i * step
+            b.append(f'<line x1="{f1(x)}" y1="252" x2="{f1(x)}" y2="260" stroke="{t["label"]}"/>'
+                     f'<text x="{f1(x + 4)}" y="276" class="fl" font-size="12.5" letter-spacing="1.4" fill="{t["label"]}">{day.strftime("%b").upper()}</text>')
+    b.append(f'<line x1="{x0}" y1="252" x2="{x1}" y2="252" stroke="{t["edge"]}"/>')
+
+    # peak and today
+    if max(raw) > 0:
+        ip = max(range(n), key=lambda i: raw[i])
+        xp = x0 + ip * step
+        label = f"PEAK {raw[ip]} / {fmt_date(days[ip]['date'])[:6]}"
+        anchor = "end" if xp > x1 - 160 else "start"
+        tx = xp - 8 if anchor == "end" else xp + 8
+        b.append(f'<g class="pk"><line x1="{f1(xp)}" y1="{f1(cy - amp[ip] - 6)}" x2="{f1(xp)}" y2="56" stroke="{t["red"]}" stroke-width="1.2"/>'
+                 f'<text x="{f1(tx)}" y="62" text-anchor="{anchor}" class="fm" font-size="15" fill="{t["red"]}">{esc(label)}</text></g>')
+    b.append(f'<circle cx="{x1}" cy="{cy}" r="4" fill="{t["red"]}"/><circle class="now" cx="{x1}" cy="{cy}" r="4" fill="{t["red"]}"/>')
+    return finish("".join(b), W, H, f"Entry log: {d['total']} contributions in the last year drawn as one guilloche band, longest streak {d['longest']} days, current streak {d['current']} days.", LOG_CSS)
 
 
 # ---------------------------------------------------------------- stamped visitors
 
-REG_CSS = ""
+REG_CSS = """
+.slot{transform-origin:120px 110px;animation:spin 24s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+"""
 
 
 def visitor_mark(cx, cy, r, login, serial, c, fid, cls_size=1.0) -> str:
@@ -708,7 +765,7 @@ def render_registry(entries: list[dict], t: dict) -> str:
     b = [f'<defs><filter id="rv" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="5"/>'
          f'<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.3 1.45"/><feComposite in="SourceGraphic" operator="in"/></filter></defs>']
     if not entries:  # lead with the invitation; the counter means nothing at zero
-        b.append(f'<g fill="none" stroke="{t["label"]}" stroke-width="2" stroke-dasharray="6 7"><circle cx="120" cy="110" r="74"/></g>'
+        b.append(f'<g class="slot" fill="none" stroke="{t["label"]}" stroke-width="2" stroke-dasharray="6 7"><circle cx="120" cy="110" r="74"/></g>'
                  f'<text x="120" y="115" text-anchor="middle" class="fl" font-size="14.5" letter-spacing="2" fill="{t["label"]}">YOUR STAMP</text>'
                  f'<text x="232" y="98" class="fv" font-size="30" fill="{t["ink"]}">No one stamped yet.</text>'
                  f'<text x="232" y="134" class="fb" font-size="19" fill="{t["label"]}">Open an issue titled "stamp me" and stamp No. 0001 is yours.</text>')
@@ -723,8 +780,9 @@ def render_registry(entries: list[dict], t: dict) -> str:
         cx = 400 + k * 120
         c = t["stamp_inks"][k % len(t["stamp_inks"])]
         rot = random.Random(e["login"]).uniform(-12, 12)
-        b.append(f'<g transform="rotate({rot:.1f} {cx} 112)">' + visitor_mark(cx, 112, 56, e["login"], e["serial"], c, "rv", .8) + "</g>")
-    return finish("".join(b), W, H, f"{len(entries)} visitors stamped. Merkle root {root[:16]}.", REG_CSS)
+        b.append(f'<g class="ink" style="animation-delay:{.15 + k * .12:.2f}s"><g transform="rotate({rot:.1f} {cx} 112)">'
+                 + visitor_mark(cx, 112, 56, e["login"], e["serial"], c, "rv", .8) + "</g></g>")
+    return finish("".join(b), W, H, f"{len(entries)} visitors stamped. Merkle root {root[:16]}.", REG_CSS + STAMP_CSS)
 
 
 def merkle(leaves: list[str]) -> str:
@@ -739,53 +797,113 @@ def merkle(leaves: list[str]) -> str:
 # ---------------------------------------------------------------- 3D seal (inline STL)
 
 
-def seal_stl(weeks: list[dict]) -> str:
-    """A medallion: one tower per week of the year around a disc, as ASCII STL."""
+def earclip(pts: list[tuple[float, float]]) -> list[tuple[int, int, int]]:
+    """Triangulate a simple counter-clockwise polygon."""
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    idx, out = list(range(len(pts))), []
+    while len(idx) > 3:
+        for k in range(len(idx)):
+            i0, i1, i2 = idx[k - 1], idx[k], idx[(k + 1) % len(idx)]
+            a, b, c = pts[i0], pts[i1], pts[i2]
+            if cross(a, b, c) <= 1e-9:
+                continue
+            if any(cross(a, b, pts[j]) >= 0 and cross(b, c, pts[j]) >= 0 and cross(c, a, pts[j]) >= 0
+                   for j in idx if j not in (i0, i1, i2)):
+                continue
+            out.append((i0, i1, i2))
+            idx.pop(k)
+            break
+        else:
+            raise ValueError("polygon is not simple or not counter-clockwise")
+    out.append(tuple(idx))
+    return out
+
+
+def _area(pts, tris):
+    return sum(abs((pts[b][0] - pts[a][0]) * (pts[c][1] - pts[a][1]) - (pts[b][1] - pts[a][1]) * (pts[c][0] - pts[a][0])) / 2
+               for a, b, c in tris)
+
+
+_L = [(0, 0), (2, 0), (2, 1), (1, 1), (1, 3), (0, 3)]  # an L, area 4
+assert abs(_area(_L, earclip(_L)) - 4) < 1e-9
+
+
+def key_pins() -> str:
+    return hashlib.sha256(USER.encode()).hexdigest()[:9]
+
+
+def key_stl(weeks: list[dict]) -> str:
+    """A key: nine pins cut to sha256(username); the grip's ridges are the last twelve months of commits."""
     tris = []
+    T = 2.6
 
     def quad(a, b, c, d):
         tris.append((a, b, c))
         tris.append((a, c, d))
 
-    seg, R, T = 72, 46.0, 3.0
-    for k in range(seg):  # base disc
-        a0, a1 = 2 * math.pi * k / seg, 2 * math.pi * (k + 1) / seg
-        p0, p1 = (R * math.cos(a0), R * math.sin(a0)), (R * math.cos(a1), R * math.sin(a1))
-        tris.append(((0, 0, T), (*p0, T), (*p1, T)))
-        tris.append(((0, 0, 0), (*p1, 0), (*p0, 0)))
-        quad((*p0, 0), (*p1, 0), (*p1, T), (*p0, T))
-    totals = [sum(c["contributionCount"] for c in w["contributionDays"]) for w in weeks] or [0]
-    top = max(totals) or 1
-    n = len(totals)
-    r0, r1 = 26.0, 42.0
-    for k, v in enumerate(totals):  # weekly towers
-        h = T + 1.2 + 20 * (v / top) ** .8
-        a0 = 2 * math.pi * k / n + .012
-        a1 = 2 * math.pi * (k + 1) / n - .012
-        pts = [(r * math.cos(a), r * math.sin(a)) for r, a in ((r0, a0), (r1, a0), (r1, a1), (r0, a1))]
-        lo = [(*p, T) for p in pts]
-        hi = [(*p, h) for p in pts]
-        quad(*hi)
-        for j in range(4):
-            quad(lo[j], lo[(j + 1) % 4], hi[(j + 1) % 4], hi[j])
-    hub_r, hub_h = 14.0, T + 6  # raised hub
-    for k in range(36):
-        a0, a1 = 2 * math.pi * k / 36, 2 * math.pi * (k + 1) / 36
-        p0, p1 = (hub_r * math.cos(a0), hub_r * math.sin(a0)), (hub_r * math.cos(a1), hub_r * math.sin(a1))
-        tris.append(((0, 0, hub_h), (*p0, hub_h), (*p1, hub_h)))
-        quad((*p0, T), (*p1, T), (*p1, hub_h), (*p0, hub_h))
+    def prism(poly2d, z0, z1):
+        for a, b, c in earclip(poly2d):
+            tris.append(((*poly2d[a], z1), (*poly2d[b], z1), (*poly2d[c], z1)))
+            tris.append(((*poly2d[a], z0), (*poly2d[c], z0), (*poly2d[b], z0)))
+        m = len(poly2d)
+        for i in range(m):
+            p, q = poly2d[i], poly2d[(i + 1) % m]
+            quad((*p, z0), (*q, z0), (*q, z1), (*p, z1))
+
+    # blade: pins as V cuts along the bottom edge, a shoulder stop, a pointed tip
+    pins = [int(h, 16) for h in key_pins()]
+    base, topy = -4.4, 4.4
+    blade = [(11, base), (15, base), (15, base - 2.2), (18.5, base - 2.2), (18.5, base)]
+    for k, h in enumerate(pins):
+        c = 23 + k * 4.6
+        y = base + .36 * h
+        if k == 0:
+            blade.append((c - 2.3, base))
+        blade += [(c - .55, y), (c + .55, y), (c + 2.3, base)]
+    blade += [(66, base), (69, -1.2), (68.5, 1.6), (65.5, topy), (11, topy)]
+    prism(blade, 0, T)
+    prism([(19, .9), (61, .9), (61, 2.3), (19, 2.3)], T, T + .7)       # warding ridge, front
+    prism([(19, -1.9), (61, -1.9), (61, -.5), (19, -.5)], -.7, 0)      # warding ridge, back
+
+    # bow: a ring whose outer edge rises once per month of activity
+    months: dict[tuple[int, int], int] = {}
+    for w in weeks:
+        for c in w["contributionDays"]:
+            dd = dt.date.fromisoformat(c["date"])
+            months[(dd.year, dd.month)] = months.get((dd.year, dd.month), 0) + c["contributionCount"]
+    vals = [months[k] for k in sorted(months)][-12:]
+    vals = [0] * (12 - len(vals)) + vals
+    top = max(vals) or 1
+    seg, r_in, r_out = 96, 5.6, 13.5
+    a_lo, a_hi = math.radians(30), math.radians(330)   # leave the neck where the blade joins
+    ring = []
+    for j in range(seg):
+        a = 2 * math.pi * j / seg
+        r = r_out
+        if a_lo <= a <= a_hi:
+            f = (a - a_lo) / (a_hi - a_lo) * 12
+            m, frac = min(int(f), 11), f - int(f)
+            r += (1.1 + 4.4 * (vals[m] / top) ** .7) * math.sin(math.pi * frac) ** 2
+        ring.append(((r_in * math.cos(a), r_in * math.sin(a)), (r * math.cos(a), r * math.sin(a))))
+    for j in range(seg):
+        (i0, o0), (i1, o1) = ring[j], ring[(j + 1) % seg]
+        quad((*i0, T), (*o0, T), (*o1, T), (*i1, T))
+        quad((*i1, 0), (*o1, 0), (*o0, 0), (*i0, 0))
+        quad((*o0, 0), (*o1, 0), (*o1, T), (*o0, T))
+        quad((*i1, 0), (*i0, 0), (*i0, T), (*i1, T))
 
     def v(p):
         return " ".join(f1(c) for c in p)
 
-    lines = ["solid seal"]
+    lines = ["solid key"]
     for a, b_, c in tris:
         u = [b_[i] - a[i] for i in range(3)]
         w = [c[i] - a[i] for i in range(3)]
         nrm = (u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0])
         ln = math.sqrt(sum(x * x for x in nrm)) or 1
         lines.append(f"facet normal {' '.join(f1(x / ln) for x in nrm)}\nouter loop\nvertex {v(a)}\nvertex {v(b_)}\nvertex {v(c)}\nendloop\nendfacet")
-    lines.append("endsolid seal")
+    lines.append("endsolid key")
     return "\n".join(lines)
 
 
@@ -795,7 +913,10 @@ def write_seal(weeks: list[dict]) -> None:
     if start not in text or end not in text:
         print("README has no seal markers; skipping seal", file=sys.stderr)
         return
-    block = f"{start}\n```stl\n{seal_stl(weeks)}\n```\n{end}"
+    pins = key_pins()
+    caption = (f"Nine pins, cut to the first nine hex digits of `sha256(\"{USER}\")` = `{pins}`. "
+               "The ridges on the grip are the last twelve months of commits. Drag to turn it.")
+    block = f"{start}\n{caption}\n\n```stl\n{key_stl(weeks)}\n```\n{end}"
     text = re.sub(re.escape(start) + r".*?" + re.escape(end), lambda _: block, text, flags=re.S)
     README.write_bytes(text.encode("utf-8"))
 
