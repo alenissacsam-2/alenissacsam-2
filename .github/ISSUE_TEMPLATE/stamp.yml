@@ -1,0 +1,40 @@
+name: Get stamped
+description: Fill in the customs declaration and a workflow presses and signs your visa stamp.
+title: stamp me
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Customs declaration.** Submit it and a workflow presses your stamp, signs it with Sigstore, and replies here within a minute.
+  - type: dropdown
+    id: purpose
+    attributes:
+      label: Purpose of visit
+      options:
+        - Collaboration
+        - Hiring
+        - Learning
+        - Sightseeing
+    validations:
+      required: true
+  - type: input
+    id: ink
+    attributes:
+      label: Ink
+      description: Red, Blue, Violet or Green. The pad you clicked filled this in.
+      placeholder: Red
+  - type: dropdown
+    id: shape
+    attributes:
+      label: Stamp shape
+      options:
+        - Round
+        - Octagon
+        - Shield
+  - type: checkboxes
+    id: declare
+    attributes:
+      label: Declarations
+      options:
+        - label: I have nothing to declare except curiosity.
+          required: true

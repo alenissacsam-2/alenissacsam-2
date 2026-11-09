@@ -9,7 +9,34 @@
   <img src="assets/generated/passport-day.svg" width="100%" alt="Passport of Alen Issac Sam. Surname Sam, given names Alen Issac, Indian, resident in Kerala, studying at IIT Hyderabad, working on decentralized identity on Ethereum and Algorand. Valid until disproven. The document number is the SHA-256 of this README." />
 </picture>
 
-<p align="center"><b>Don't trust this page.</b> &nbsp;<a href="#dont-trust-this-page-verify-it">Verify it</a> &nbsp;or&nbsp; <a href="https://github.com/alenissacsam-2/alenissacsam-2/issues/new?title=stamp+me&body=Stamp+my+passport.">get stamped</a>.</p>
+<p align="center"><b>Don't trust this page.</b> &nbsp;<a href="#dont-trust-this-page-verify-it">Verify it</a> &nbsp;or&nbsp; <a href="#get-stamped">get stamped</a>.</p>
+
+<details>
+<summary><b>Hold it under the lamp</b> &nbsp;·&nbsp; the same page in the other light</summary>
+<br />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/generated/passport-day.svg" />
+  <img src="assets/generated/passport-uv.svg" width="100%" alt="The passport under the other light: daylight print in dark mode, a UV lamp in light mode, where fluorescent fibres and a hidden rosette appear." />
+</picture>
+</details>
+
+<details>
+<summary><b>Tap the chip</b> &nbsp;·&nbsp; read the data groups</summary>
+
+<!-- chip:start -->
+```console
+> SELECT AID A0 00 00 02 47 10 01   # the ICAO eMRTD applet
+< 90 00
+> READ DG1    P<UTOSAM<<ALEN<ISSAC<<<<<<<<<<<<<<<<<<<<<<<<
+> READ DG2    portrait, 73 engraved lines, sha256 2d0b27dde579fe54
+> READ DG11   IIT HYDERABAD / DECENTRALIZED IDENTITY
+> READ DG15   public key 093afc951, cut into the key at the bottom
+> READ SOD    signed by Sigstore from GitHub Actions; verify it below
+< 90 00
+```
+<!-- chip:end -->
+
+</details>
 
 I build systems where trust is something you check instead of something you are asked for:
 decentralized identity on **Algorand** and **Ethereum**, an on-chain certificate registry,
@@ -18,6 +45,13 @@ and around them, AI agents, neural nets from first principles, and market-micros
 [LinkedIn](https://www.linkedin.com/in/alenissacsam050/) &nbsp;/&nbsp; [X](https://x.com/alenissacsam) &nbsp;/&nbsp; [alenissacsam12@gmail.com](mailto:alenissacsam12@gmail.com)
 
 <br />
+
+## Departures
+
+<a href="https://github.com/alenissacsam-2?tab=repositories"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/generated/board-uv.svg" />
+  <img src="assets/generated/board-day.svg" width="100%" alt="Departures board: my most recently pushed repositories as flights, with the time of the last push, language as the gate, and whether each is boarding, in flight or landed." />
+</picture></a>
 
 ## Visas
 
@@ -49,8 +83,15 @@ gh attestation verify README.md -R alenissacsam-2/alenissacsam-2
 
 ## Get stamped
 
-[Open an issue titled **stamp me**](https://github.com/alenissacsam-2/alenissacsam-2/issues/new?title=stamp+me&body=Stamp+my+passport.) and a workflow issues you a signed visa stamp.
-It replies with an image you can put in your own README and a command that proves it came from here.
+Pick an ink. You fill in a short customs declaration, and a workflow presses your stamp, signs it,
+and replies with an image for your own README and a command that proves it came from here.
+
+<p align="center">
+<a href="https://github.com/alenissacsam-2/alenissacsam-2/issues/new?template=stamp.yml&ink=Red"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/generated/pad-red-uv.svg" /><img src="assets/generated/pad-red-day.svg" width="24%" alt="Red ink" /></picture></a>
+<a href="https://github.com/alenissacsam-2/alenissacsam-2/issues/new?template=stamp.yml&ink=Blue"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/generated/pad-blue-uv.svg" /><img src="assets/generated/pad-blue-day.svg" width="24%" alt="Blue ink" /></picture></a>
+<a href="https://github.com/alenissacsam-2/alenissacsam-2/issues/new?template=stamp.yml&ink=Violet"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/generated/pad-violet-uv.svg" /><img src="assets/generated/pad-violet-day.svg" width="24%" alt="Violet ink" /></picture></a>
+<a href="https://github.com/alenissacsam-2/alenissacsam-2/issues/new?template=stamp.yml&ink=Green"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/generated/pad-green-uv.svg" /><img src="assets/generated/pad-green-day.svg" width="24%" alt="Green ink" /></picture></a>
+</p>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/generated/registry-uv.svg" />
@@ -5809,20 +5850,20 @@ facet normal 0 0 1
 outer loop
 vertex 3.1 -4.7 2.6
 vertex 7.5 -11.2 2.6
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 3.1 -4.7 2.6
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 2.6
 vertex 3.4 -4.4 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 3.4 -4.4 0
-vertex 8.3 -10.9 0
+vertex 8.4 -10.9 0
 vertex 7.5 -11.2 0
 endloop
 endfacet
@@ -5836,14 +5877,14 @@ endfacet
 facet normal 0.4 -0.9 0
 outer loop
 vertex 7.5 -11.2 0
-vertex 8.3 -10.9 0
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 0
+vertex 8.4 -10.9 2.6
 endloop
 endfacet
 facet normal 0.4 -0.9 0
 outer loop
 vertex 7.5 -11.2 0
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 2.6
 vertex 7.5 -11.2 2.6
 endloop
 endfacet
@@ -5864,43 +5905,43 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 3.4 -4.4 2.6
-vertex 8.3 -10.9 2.6
-vertex 9.6 -11 2.6
+vertex 8.4 -10.9 2.6
+vertex 9.7 -11 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 3.4 -4.4 2.6
-vertex 9.6 -11 2.6
+vertex 9.7 -11 2.6
 vertex 3.7 -4.2 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 3.7 -4.2 0
-vertex 9.6 -11 0
-vertex 8.3 -10.9 0
+vertex 9.7 -11 0
+vertex 8.4 -10.9 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 3.7 -4.2 0
-vertex 8.3 -10.9 0
+vertex 8.4 -10.9 0
 vertex 3.4 -4.4 0
 endloop
 endfacet
 facet normal -0.1 -1 0
 outer loop
-vertex 8.3 -10.9 0
-vertex 9.6 -11 0
-vertex 9.6 -11 2.6
+vertex 8.4 -10.9 0
+vertex 9.7 -11 0
+vertex 9.7 -11 2.6
 endloop
 endfacet
 facet normal -0.1 -1 0
 outer loop
-vertex 8.3 -10.9 0
-vertex 9.6 -11 2.6
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 0
+vertex 9.7 -11 2.6
+vertex 8.4 -10.9 2.6
 endloop
 endfacet
 facet normal -0.6 0.8 0
@@ -5920,7 +5961,7 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 3.7 -4.2 2.6
-vertex 9.6 -11 2.6
+vertex 9.7 -11 2.6
 vertex 11 -11 2.6
 endloop
 endfacet
@@ -5935,28 +5976,28 @@ facet normal 0 0 -1
 outer loop
 vertex 4 -4 0
 vertex 11 -11 0
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 4 -4 0
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 vertex 3.7 -4.2 0
 endloop
 endfacet
 facet normal 0 -1 0
 outer loop
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 vertex 11 -11 0
 vertex 11 -11 2.6
 endloop
 endfacet
 facet normal 0 -1 0
 outer loop
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 vertex 11 -11 2.6
-vertex 9.6 -11 2.6
+vertex 9.7 -11 2.6
 endloop
 endfacet
 facet normal -0.7 0.7 0
@@ -5977,20 +6018,20 @@ facet normal 0 0 1
 outer loop
 vertex 4 -4 2.6
 vertex 11 -11 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.8 -10.4 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 4 -4 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.8 -10.4 2.6
 vertex 4.2 -3.7 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 4.2 -3.7 0
-vertex 11.8 -10.3 0
+vertex 11.8 -10.4 0
 vertex 11 -11 0
 endloop
 endfacet
@@ -6004,14 +6045,14 @@ endfacet
 facet normal 0.6 -0.8 0
 outer loop
 vertex 11 -11 0
-vertex 11.8 -10.3 0
-vertex 11.8 -10.3 2.6
+vertex 11.8 -10.4 0
+vertex 11.8 -10.4 2.6
 endloop
 endfacet
 facet normal 0.6 -0.8 0
 outer loop
 vertex 11 -11 0
-vertex 11.8 -10.3 2.6
+vertex 11.8 -10.4 2.6
 vertex 11 -11 2.6
 endloop
 endfacet
@@ -6032,7 +6073,7 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 4.2 -3.7 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.8 -10.4 2.6
 vertex 11.9 -9.1 2.6
 endloop
 endfacet
@@ -6047,28 +6088,28 @@ facet normal 0 0 -1
 outer loop
 vertex 4.4 -3.4 0
 vertex 11.9 -9.1 0
-vertex 11.8 -10.3 0
+vertex 11.8 -10.4 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 4.4 -3.4 0
-vertex 11.8 -10.3 0
+vertex 11.8 -10.4 0
 vertex 4.2 -3.7 0
 endloop
 endfacet
 facet normal 1 -0.1 0
 outer loop
-vertex 11.8 -10.3 0
+vertex 11.8 -10.4 0
 vertex 11.9 -9.1 0
 vertex 11.9 -9.1 2.6
 endloop
 endfacet
 facet normal 1 -0.1 0
 outer loop
-vertex 11.8 -10.3 0
+vertex 11.8 -10.4 0
 vertex 11.9 -9.1 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.8 -10.4 2.6
 endloop
 endfacet
 facet normal -0.8 0.6 0

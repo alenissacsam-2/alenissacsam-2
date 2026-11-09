@@ -23,6 +23,7 @@ jobs:
       NUMBER: ${{ github.event.issue.number }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       REPO: ${{ github.repository }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
     steps:
       - uses: actions/checkout@v4
 

@@ -82,7 +82,8 @@ query($login: String!) {
                  orderBy: {field: PUSHED_AT, direction: DESC}) {
       totalCount
       nodes {
-        name createdAt stargazerCount url
+        name createdAt pushedAt stargazerCount url
+        primaryLanguage { name }
         languages(first: 12, orderBy: {field: SIZE, direction: DESC}) {
           edges { size node { name } }
         }
@@ -139,7 +140,10 @@ def mock() -> dict:
         weeks.append({"contributionDays": days})
 
     def repo(name, created, langs):
-        return {"name": name, "createdAt": created, "stargazerCount": 0,
+        age = int(hashlib.sha256(name.encode()).hexdigest(), 16) % 40
+        pushed = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=age, hours=3)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        return {"name": name, "createdAt": created, "pushedAt": pushed, "stargazerCount": 0,
+                "primaryLanguage": {"name": langs[0][0]},
                 "url": f"https://github.com/{USER}/{name}",
                 "languages": {"edges": [{"size": s, "node": {"name": n}} for n, s in langs]}}
 
@@ -193,6 +197,8 @@ def digest(user: dict) -> dict:
         "current": current,
         "langs": langs,
         "visas": [(by_name.get(n), n, t, p, s) for n, t, p, s in VISAS],
+        "recent": sorted((r for r in repos if r["name"] != USER and r.get("pushedAt")),
+                         key=lambda r: r["pushedAt"], reverse=True)[:6],
     }
 
 
@@ -739,6 +745,193 @@ def render_log(d: dict, t: dict) -> str:
     return finish("".join(b), W, H, f"Entry log: {d['total']} contributions in the last year drawn as one guilloche band, longest streak {d['longest']} days, current streak {d['current']} days.", LOG_CSS)
 
 
+# ---------------------------------------------------------------- departures board (split flap)
+
+BOARD_CSS = """
+.fp{animation-name:flip;animation-fill-mode:both}
+@keyframes flip{from{transform:translateY(var(--k))}99%,to{transform:translateY(0)}}
+.fh{transform-box:fill-box;transform-origin:50% 100%;animation-name:hinge;animation-timing-function:linear}
+@keyframes hinge{from{opacity:.22;transform:scaleY(1)}to{opacity:.04;transform:scaleY(0)}}
+.bl{animation:bl 1.1s steps(2,jump-none) infinite}
+@keyframes bl{50%{opacity:.25}}
+"""
+FLAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+GATES = {"TypeScript": "TS", "JavaScript": "JS", "Python": "PY", "Solidity": "SOL", "Jupyter Notebook": "NB",
+         "Rust": "RS", "Go": "GO", "HTML": "WEB", "CSS": "WEB", "Shell": "SH", "C++": "CPP", "Move": "MV"}
+
+
+def fit_words(s: str, n: int) -> str:
+    out = ""
+    for w in s.upper().replace("-", " ").replace("_", " ").split():
+        if len(out) + len(w) + bool(out) > n:
+            break
+        out += (" " if out else "") + w
+    return out or s.upper()[:n]
+
+
+def board_rows(recent: list[dict], now: dt.datetime) -> list[tuple[list[str], str]]:
+    rows = []
+    for r in recent:
+        pushed = dt.datetime.fromisoformat(r["pushedAt"].replace("Z", "+00:00"))
+        age = (now - pushed).total_seconds() / 86400
+        status = "BOARDING" if age <= 3 else "IN FLIGHT" if age <= 30 else "LANDED"
+        lang = (r.get("primaryLanguage") or {}).get("name")
+        gate = GATES.get(lang, (lang or "--")[:3].upper())
+        flight = "AS " + hashlib.sha256(r["name"].encode()).hexdigest()[:3].upper()
+        rows.append(([pushed.strftime("%H:%M"), flight, fit_words(r["name"], 18), gate, status], status))
+    return rows
+
+
+def render_board(d: dict, t: dict) -> str:
+    """Recent pushes as a split-flap departures board; every tile flips through letters before it lands."""
+    now = dt.datetime.now(dt.timezone.utc)
+    rows = board_rows(d["recent"], now)
+    uv = t["name"] == "uv"
+    cols = [("TIME", 5), ("FLIGHT", 6), ("DESTINATION", 18), ("GATE", 3), ("REMARKS", 9)]
+    pitch, tw, th, gap, rh = 24, 22, 40, 16, 54
+    x0, y0 = 76, 118
+    W, H = 1200, y0 + max(len(rows), 1) * rh + 34
+    pal = dict(board="#101B30" if not uv else "#07060F", tile="#1C2B48" if not uv else "#16152E",
+               lo="#18263F" if not uv else "#121127", ch="#EEF2F1" if not uv else "#E6E8FF",
+               lab="#8FA3B8" if not uv else "#9296CC", amber="#F5B93D" if not uv else "#FFB04A",
+               fly="#7FD6CB" if not uv else "#5CF2C8", land="#8FA3B8" if not uv else "#9296CC")
+    tone = {"BOARDING": pal["amber"], "IN FLIGHT": pal["fly"], "LANDED": pal["land"]}
+    rng = random.Random(d["created"] + str(len(rows)))
+    b = [f'<rect width="{W}" height="{H}" rx="26" fill="{pal["board"]}"/>'
+         f'<rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="25.5" fill="none" stroke="{t["edge"]}" opacity="{.6 if uv else 0}"/>'
+         f'<text x="{x0}" y="62" class="fv" font-size="28" letter-spacing="9" fill="{pal["ch"]}">DEPARTURES</text>'
+         f'<text x="{W - x0}" y="62" text-anchor="end" class="fm" font-size="15" fill="{pal["lab"]}">LAST PUSH, UTC / UPDATED {now.strftime("%H:%M")}</text>']
+    xs, x = [], x0
+    for name, n in cols:
+        xs.append(x)
+        b.append(f'<text x="{x}" y="100" class="fl" font-size="12.5" letter-spacing="1.6" fill="{pal["lab"]}">{name}</text>')
+        x += n * pitch + gap
+    clips, cells = [], []
+    for ri, (vals, status) in enumerate(rows):
+        top = y0 + ri * rh
+        clips.append(f'<clipPath id="r{ri}"><rect x="0" y="{top}" width="{W}" height="{th}"/></clipPath>')
+        row = [f'<g clip-path="url(#r{ri})">']
+        settle = 0
+        for ci, ((_, n), val) in enumerate(zip(cols, vals)):
+            col_cells = []
+            for k in range(n):
+                cx = xs[ci] + k * pitch
+                ch = val[k] if k < len(val) else " "
+                flips = rng.randint(3, 8)
+                dl = .25 + ri * .16 + (xs[ci] - x0 + k * pitch) / pitch * .022
+                dur = flips * .065
+                settle = max(settle, dl + dur)
+                fill = tone[status] if ci == 4 else pal["ch"]
+                strip = "".join(f'<tspan x="{cx + tw / 2}" y="{top + 29 + j * th}">{rng.choice(FLAPS)}</tspan>' for j in range(1, flips + 1))
+                col_cells.append(
+                    f'<rect x="{cx}" y="{top}" width="{tw}" height="{th}" rx="3" fill="{pal["tile"]}"/>'
+                    f'<rect x="{cx}" y="{top + th / 2}" width="{tw}" height="{th / 2}" rx="3" fill="{pal["lo"]}"/>'
+                    f'<text class="fm fp" font-size="25" text-anchor="middle" fill="{fill}" '
+                    f'style="--k:-{flips * th}px;animation-duration:{dur:.2f}s;animation-delay:{dl:.2f}s;animation-timing-function:steps({flips},end)">'
+                    f'<tspan x="{cx + tw / 2}" y="{top + 29}">{esc(ch) if ch != " " else "&#160;"}</tspan>{strip}</text>'
+                    f'<rect class="fh" x="{cx}" y="{top}" width="{tw}" height="{th / 2}" fill="#fff" opacity="0" '
+                    f'style="animation-duration:.065s;animation-delay:{dl:.2f}s;animation-iteration-count:{flips}"/>')
+            if ci == 4 and status == "BOARDING":
+                row.append(f'<g class="bl" style="animation-delay:{settle:.2f}s">{"".join(col_cells)}</g>')
+            else:
+                row += col_cells
+        row.append(f'<rect x="0" y="{top + th / 2 - .75}" width="{W}" height="1.5" fill="{pal["board"]}"/></g>')
+        cells.append("".join(row))
+    if not rows:
+        cells.append(f'<text x="{x0}" y="{y0 + 30}" class="fm" font-size="22" fill="{pal["lab"]}">NO DEPARTURES TODAY</text>')
+    b.insert(0, f"<defs>{''.join(clips)}</defs>")
+    b += cells
+    names = ", ".join(f"{v[2].lower()} {s.lower()}" for v, s in rows)
+    return finish("".join(b), W, H, f"Departures board of recently pushed repositories: {names}.", BOARD_CSS)
+
+
+# ---------------------------------------------------------------- ink pads (pick an ink, open the customs form)
+
+INKS = {"Red": ("#C42F2A", "#FF6B4A"), "Blue": ("#1F4FA8", "#7FA8FF"),
+        "Violet": ("#5B3C9E", "#C79BFF"), "Green": ("#1E7A55", "#5CF2C8")}
+SHAPES = ["Round", "Octagon", "Shield"]
+PURPOSES = ["Collaboration", "Hiring", "Learning", "Sightseeing"]
+
+PAD_CSS = """
+.sh{animation:sh 3.6s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes sh{from{transform:translateX(-140px)}to{transform:translateX(320px)}}
+.dab{transform-box:fill-box;transform-origin:center;animation:dab 4.8s cubic-bezier(.16,1,.3,1) infinite both}
+@keyframes dab{0%{opacity:0;transform:scale(1.25)}7%{opacity:.6;transform:scale(1)}55%,100%{opacity:0;transform:scale(1)}}
+"""
+
+
+def render_pad(i: int, name: str, t: dict) -> str:
+    W, H = 280, 150
+    c = INKS[name][t["name"] == "uv"]
+    uv = t["name"] == "uv"
+    tin = "#B9C6C2" if not uv else "#2C2856"
+    b = [f'<defs><clipPath id="felt"><rect x="34" y="30" width="212" height="70" rx="10"/></clipPath>'
+         f'<filter id="tx"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="{i + 3}"/>'
+         f'<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.25"/><feComposite in2="SourceGraphic" operator="in"/></filter>'
+         f'<linearGradient id="sg"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity="{.32 if not uv else .22}"/>'
+         f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>'
+         f'<rect x="20" y="16" width="240" height="98" rx="18" fill="{tin}"/>'
+         f'<rect x="20.5" y="16.5" width="239" height="97" rx="17.5" fill="none" stroke="{t["ink"]}" stroke-opacity=".25"/>'
+         f'<g clip-path="url(#felt)"><rect x="34" y="30" width="212" height="70" fill="{c}"/>'
+         f'<rect x="34" y="30" width="212" height="70" fill="#000" opacity=".35" filter="url(#tx)"/>'
+         f'<circle class="dab" cx="{110 + i * 17}" cy="65" r="22" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="4" style="animation-delay:{i * 1.2:.1f}s"/>'
+         f'<rect class="sh" x="34" y="20" width="70" height="90" fill="url(#sg)" transform="skewX(-18)" style="animation-delay:{i * .4:.1f}s"/></g>'
+         f'<text x="{W / 2}" y="140" text-anchor="middle" class="fl" font-size="15" letter-spacing="3" fill="{t["label"]}">{name.upper()}</text>']
+    return finish("".join(b), W, H, f"{name} ink pad: open the customs declaration with {name.lower()} ink", PAD_CSS)
+
+
+def outline(shape: str, cx: float, cy: float, r: float) -> list[str]:
+    """Outer and inner rule of a visitor stamp."""
+    if shape == "Octagon":
+        return [poly([(cx + q * math.cos(math.radians(22.5 + 45 * k)), cy + q * math.sin(math.radians(22.5 + 45 * k))) for k in range(8)])
+                for q in (r, r * .84)]
+    if shape == "Shield":
+        def sh(q):
+            return (f"M{f1(cx - q * .86)} {f1(cy - q * .8)}H{f1(cx + q * .86)}V{f1(cy + q * .1)}"
+                    f"C{f1(cx + q * .86)} {f1(cy + q * .55)} {f1(cx + q * .4)} {f1(cy + q * .8)} {f1(cx)} {f1(cy + q)}"
+                    f"C{f1(cx - q * .4)} {f1(cy + q * .8)} {f1(cx - q * .86)} {f1(cy + q * .55)} {f1(cx - q * .86)} {f1(cy + q * .1)}Z")
+        return [sh(r), sh(r * .84)]
+    return [f"M{f1(cx - q)} {f1(cy)}a{q} {q} 0 1 0 {f1(2 * q)} 0a{q} {q} 0 1 0 {f1(-2 * q)} 0Z" for q in (r, r * .78)]
+
+
+def declaration(body: str, login: str) -> dict:
+    """Read the customs form out of an issue body. Untrusted: only whitelisted values survive."""
+    fields = {k.strip().lower(): v.strip() for k, v in re.findall(r"^###\s*(.+?)\s*\n+([^\n#][^\n]*)", body or "", re.M)}
+    pick = int(hashlib.sha256(login.lower().encode()).hexdigest(), 16)
+    ink = fields.get("ink", "").title()
+    shape = fields.get("stamp shape", "").title()
+    purpose = fields.get("purpose of visit", "").title()
+    return {"ink": ink if ink in INKS else list(INKS)[pick % 4],
+            "shape": shape if shape in SHAPES else "Round",
+            "purpose": purpose if purpose in PURPOSES else None}
+
+
+_form = "### Purpose of visit\n\nHiring\n\n### Ink\n\nviolet\n\n### Stamp shape\n\n_No response_\n"
+assert declaration(_form, "x") == {"ink": "Violet", "shape": "Round", "purpose": "Hiring"}
+assert declaration("### Ink\n\n<script>", "x")["ink"] in INKS
+
+
+# ---------------------------------------------------------------- chip readout (inside README)
+
+
+def chip_block(portrait: str) -> str:
+    line1 = mrz("0" * 64)[0]
+    lines = portrait.count("Z")
+    p_hash = hashlib.sha256(portrait.encode()).hexdigest()
+    return "\n".join([
+        "```console",
+        "> SELECT AID A0 00 00 02 47 10 01   # the ICAO eMRTD applet",
+        "< 90 00",
+        f"> READ DG1    {line1}",
+        f"> READ DG2    portrait, {lines} engraved lines, sha256 {p_hash[:16]}",
+        f"> READ DG11   {HOLDER['institution']} / {HOLDER['field']}",
+        f"> READ DG15   public key {key_pins()}, cut into the key at the bottom",
+        "> READ SOD    signed by Sigstore from GitHub Actions; verify it below",
+        "< 90 00",
+        "```",
+    ])
+
+
 # ---------------------------------------------------------------- stamped visitors
 
 REG_CSS = """
@@ -747,13 +940,17 @@ REG_CSS = """
 """
 
 
-def visitor_mark(cx, cy, r, login, serial, c, fid, cls_size=1.0) -> str:
+def visitor_mark(cx, cy, r, login, serial, c, fid, cls_size=1.0, shape="Round") -> str:
     login = login.upper()
     size = 15 * cls_size
-    while size > 7 and text_len("fv", login, size) > (r - 8) * 2 - 14:
+    room = r * 1.45
+    while size > 8 and text_len("fv", login, size) > room:
         size -= .5
-    return (f'<g filter="url(#{fid})" fill="none" stroke="{c}"><circle cx="{cx}" cy="{cy}" r="{r}" stroke-width="3"/>'
-            f'<circle cx="{cx}" cy="{cy}" r="{r - 8}" stroke-width="1"/>'
+    while len(login) > 4 and text_len("fv", login, size) > room:
+        login = login[:-2] + "…"
+    o, i = outline(shape, cx, cy, r)
+    return (f'<g filter="url(#{fid})" fill="none" stroke="{c}"><path d="{o}" stroke-width="3"/>'
+            f'<path d="{i}" stroke-width="1"/>'
             f'<text x="{cx}" y="{cy + 4}" text-anchor="middle" class="fv" font-size="{size:.1f}" fill="{c}" stroke="none">{esc(login)}</text>'
             f'<text x="{cx}" y="{cy + 22}" text-anchor="middle" class="fm" font-size="10" fill="{c}" stroke="none">No. {serial:04d}</text></g>')
 
@@ -768,7 +965,7 @@ def render_registry(entries: list[dict], t: dict) -> str:
         b.append(f'<g class="slot" fill="none" stroke="{t["label"]}" stroke-width="2" stroke-dasharray="6 7"><circle cx="120" cy="110" r="74"/></g>'
                  f'<text x="120" y="115" text-anchor="middle" class="fl" font-size="14.5" letter-spacing="2" fill="{t["label"]}">YOUR STAMP</text>'
                  f'<text x="232" y="98" class="fv" font-size="30" fill="{t["ink"]}">No one stamped yet.</text>'
-                 f'<text x="232" y="134" class="fb" font-size="19" fill="{t["label"]}">Open an issue titled "stamp me" and stamp No. 0001 is yours.</text>')
+                 f'<text x="232" y="134" class="fb" font-size="19" fill="{t["label"]}">Pick an ink above, fill in the declaration, and No. 0001 is yours.</text>')
         return finish("".join(b), W, H, "No visitors stamped yet. Open an issue titled stamp me to get the first stamp.", REG_CSS)
     b.append(f'<text x="40" y="50" class="fl" font-size="14.5" letter-spacing="1.4" fill="{t["label"]}">STAMPS ISSUED</text>'
              f'<text x="40" y="96" class="fv" font-size="40" fill="{t["ink"]}">{len(entries):,}</text>'
@@ -778,10 +975,10 @@ def render_registry(entries: list[dict], t: dict) -> str:
              f'<line x1="300" y1="36" x2="300" y2="190" stroke="{t["edge"]}"/>')
     for k, e in enumerate(recent):
         cx = 400 + k * 120
-        c = t["stamp_inks"][k % len(t["stamp_inks"])]
+        c = INKS[e["ink"]][t["name"] == "uv"] if e.get("ink") in INKS else t["stamp_inks"][k % len(t["stamp_inks"])]
         rot = random.Random(e["login"]).uniform(-12, 12)
         b.append(f'<g class="ink" style="animation-delay:{.15 + k * .12:.2f}s"><g transform="rotate({rot:.1f} {cx} 112)">'
-                 + visitor_mark(cx, 112, 56, e["login"], e["serial"], c, "rv", .8) + "</g></g>")
+                 + visitor_mark(cx, 112, 56, e["login"], e["serial"], c, "rv", .8, e.get("shape", "Round")) + "</g></g>")
     return finish("".join(b), W, H, f"{len(entries)} visitors stamped. Merkle root {root[:16]}.", REG_CSS + STAMP_CSS)
 
 
@@ -907,18 +1104,21 @@ def key_stl(weeks: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def write_seal(weeks: list[dict]) -> None:
+def write_block(name: str, content: str) -> None:
     text = README.read_text(encoding="utf-8")
-    start, end = "<!-- seal:start -->", "<!-- seal:end -->"
+    start, end = f"<!-- {name}:start -->", f"<!-- {name}:end -->"
     if start not in text or end not in text:
-        print("README has no seal markers; skipping seal", file=sys.stderr)
+        print(f"README has no {name} markers; skipping", file=sys.stderr)
         return
-    pins = key_pins()
-    caption = (f"Nine pins, cut to the first nine hex digits of `sha256(\"{USER}\")` = `{pins}`. "
-               "The ridges on the grip are the last twelve months of commits. Drag to turn it.")
-    block = f"{start}\n{caption}\n\n```stl\n{key_stl(weeks)}\n```\n{end}"
+    block = f"{start}\n{content}\n{end}"
     text = re.sub(re.escape(start) + r".*?" + re.escape(end), lambda _: block, text, flags=re.S)
     README.write_bytes(text.encode("utf-8"))
+
+
+def write_seal(weeks: list[dict]) -> None:
+    caption = (f"Nine pins, cut to the first nine hex digits of `sha256(\"{USER}\")` = `{key_pins()}`. "
+               "The ridges on the grip are the last twelve months of commits. Drag to turn it.")
+    write_block("seal", f"{caption}\n\n```stl\n{key_stl(weeks)}\n```")
 
 
 # ---------------------------------------------------------------- visitor stamp
@@ -929,7 +1129,7 @@ def load_registry() -> list[dict]:
     return json.loads(idx.read_text(encoding="utf-8")) if idx.exists() else []
 
 
-def issue_stamp(login: str, serial: int | None = None) -> dict:
+def issue_stamp(login: str, serial: int | None = None, body: str = "") -> dict:
     """Write stamps/<login>.json + .svg and update the registry. Idempotent per login."""
     if not re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})", login):
         raise SystemExit(f"refusing odd login: {login!r}")
@@ -940,18 +1140,19 @@ def issue_stamp(login: str, serial: int | None = None) -> dict:
         return existing
     serial = serial or len(entries) + 1
     now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    decl = declaration(body, login)
     cred = {
         "@context": ["https://www.w3.org/ns/credentials/v2"],
         "type": ["VerifiableCredential", "VisaStamp"],
         "issuer": f"https://github.com/{USER}",
         "validFrom": now,
-        "credentialSubject": {"id": f"https://github.com/{login}", "serial": serial},
+        "credentialSubject": {"id": f"https://github.com/{login}", "serial": serial, **{k: v for k, v in decl.items() if v}},
         "proof": "Sigstore attestation via GitHub Actions; verify with: "
                  f"gh attestation verify stamps/{login}.json -R {USER}/{USER}",
     }
     raw = json.dumps(cred, indent=2).encode() + b"\n"
     (STAMPS / f"{login}.json").write_bytes(raw)
-    entry = {"login": login, "serial": serial, "issued": now, "digest": hashlib.sha256(raw).hexdigest()}
+    entry = {"login": login, "serial": serial, "issued": now, **decl, "digest": hashlib.sha256(raw).hexdigest()}
     entries.append(entry)
     (STAMPS / "index.json").write_text(json.dumps(entries, indent=2) + "\n", encoding="utf-8")
     (STAMPS / f"{login}.svg").write_text(render_visitor(entry), encoding="utf-8")
@@ -965,15 +1166,33 @@ def render_visitor(e: dict) -> str:
     """The stamp a visitor embeds in their own README; themes itself."""
     W = H = 300
     date = fmt_date(e["issued"])
+    shape = e.get("shape", "Round")
+    day, uv = INKS.get(e.get("ink"), INKS["Red"])
+    o, i = outline(shape, 150, 150 if shape != "Shield" else 146, 138)
+    if shape == "Round":
+        rim = (_arc_text(150, 150, 116, f"VERIFIED BY {USER.upper()}", 12.5, "currentColor", -90, 230, "va", spacing=2)
+               + _arc_text(150, 150, 128, date, 13, "currentColor", 90, -90, "vb", "fm", 2))
+    else:
+        top = f"VERIFIED BY {USER.upper()}"
+        ts = 10.5
+        while ts > 7 and text_len("fl", top, ts, 1.4) > 150:
+            ts -= .25
+        rim = (f'<text x="150" y="{90 if shape == "Octagon" else 80}" text-anchor="middle" class="fl" font-size="{ts}" letter-spacing="1.4" fill="currentColor">{top}</text>'
+               f'<text x="150" y="{232 if shape == "Octagon" else 222}" text-anchor="middle" class="fm" font-size="12.5" fill="currentColor">{date}</text>')
+    purpose = ""
+    if e.get("purpose"):
+        pt, ps = f'PURPOSE / {e["purpose"].upper()}', 10.5
+        while ps > 7 and text_len("fl", pt, ps, 1.6) > 140:
+            ps -= .25
+        purpose = (f'<text x="150" y="{198 if shape != "Shield" else 194}" text-anchor="middle" class="fl" font-size="{ps}" '
+                   f'letter-spacing="1.6" fill="currentColor">{pt}</text>')
     body = (f'<defs><filter id="rv" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/>'
             f'<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.3 1.45"/><feComposite in="SourceGraphic" operator="in"/></filter></defs>'
             f'<g class="ink c" transform="rotate(-8 150 150)" filter="url(#rv)" fill="none">'
-            f'<circle cx="150" cy="150" r="138" stroke-width="5"/><circle cx="150" cy="150" r="104" stroke-width="1.6"/>'
-            + _arc_text(150, 150, 116, f"VERIFIED BY {USER.upper()}", 12.5, "currentColor", -90, 230, "va", spacing=2)
-            + _arc_text(150, 150, 128, date, 13, "currentColor", 90, -90, "vb", "fm", 2)
-            + f'<text x="150" y="146" text-anchor="middle" class="fv" font-size="{max(12, min(28, 190 / max(len(e["login"]), 1))):.0f}" fill="currentColor">{esc(e["login"].upper())}</text>'
-            f'<text x="150" y="176" text-anchor="middle" class="fm" font-size="15" fill="currentColor">No. {e["serial"]:04d}</text></g>')
-    css = (".c{color:#C42F2A;stroke:#C42F2A}@media (prefers-color-scheme:dark){.c{color:#FF6B4A;stroke:#FF6B4A}}"
+            f'<path d="{o}" stroke-width="5"/><path d="{i}" stroke-width="1.6"/>' + rim + purpose
+            + f'<text x="150" y="146" text-anchor="middle" class="fv" font-size="{max(12, min(28, 170 / max(len(e["login"]), 1))):.0f}" fill="currentColor">{esc(e["login"].upper())}</text>'
+            f'<text x="150" y="174" text-anchor="middle" class="fm" font-size="15" fill="currentColor">No. {e["serial"]:04d}</text></g>')
+    css = (f".c{{color:{day};stroke:{day}}}@media (prefers-color-scheme:dark){{.c{{color:{uv};stroke:{uv}}}}}"
            + STAMP_CSS)
     return finish(body, W, H, f"Visa stamp No. {e['serial']} for {e['login']}, issued by {USER}", css)
 
@@ -984,13 +1203,17 @@ def render_visitor(e: dict) -> str:
 def build(data: dict) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     d = digest(data)
-    write_seal(d["weeks"])
-    doc_hash = hashlib.sha256(README.read_bytes()).hexdigest()  # after the seal: this is the file we sign
     portrait = portrait_paths(d["avatar"], 68, 150, 262, 338) if d["avatar"] else ""
+    write_seal(d["weeks"])
+    write_block("chip", chip_block(portrait))
+    doc_hash = hashlib.sha256(README.read_bytes()).hexdigest()  # after the blocks: this is the file we sign
     entries = load_registry()
     for t in (DAY, UV):
         (OUT / f"passport-{t['name']}.svg").write_text(render_passport(d, t, doc_hash, portrait), encoding="utf-8")
         (OUT / f"log-{t['name']}.svg").write_text(render_log(d, t), encoding="utf-8")
+        (OUT / f"board-{t['name']}.svg").write_text(render_board(d, t), encoding="utf-8")
+        for i, ink_name in enumerate(INKS):
+            (OUT / f"pad-{ink_name.lower()}-{t['name']}.svg").write_text(render_pad(i, ink_name, t), encoding="utf-8")
         (OUT / f"registry-{t['name']}.svg").write_text(render_registry(entries, t), encoding="utf-8")
         for i, (repo, name, title, port, stack) in enumerate(d["visas"]):
             (OUT / f"visa-{i + 1}-{t['name']}.svg").write_text(render_visa(i, repo, name, title, port, stack, t), encoding="utf-8")
@@ -1007,7 +1230,7 @@ def main() -> int:
     if a.cmd == "stamp":
         if not a.login:
             ap.error("stamp needs --login")
-        e = issue_stamp(a.login, a.serial)
+        e = issue_stamp(a.login, a.serial, os.environ.get("ISSUE_BODY", ""))
         print(json.dumps(e))
         return 0
     token = os.environ.get("GITHUB_TOKEN")

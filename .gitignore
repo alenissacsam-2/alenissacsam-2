@@ -3,3 +3,4 @@
 !.impeccable/surfaces/
 !.impeccable/design.json
 __pycache__/
+.claude/
