@@ -50,17 +50,17 @@
   </g>
   <g class="r" style="animation-delay:0.24s">
     <rect x="34" y="156" width="3" height="48" rx="1.5" fill="#047857"/>
-    <text class="s" x="48" y="192" font-size="31" font-weight="800" fill="#1F2328">111</text>
+    <text class="s" x="48" y="192" font-size="31" font-weight="800" fill="#1F2328">112</text>
     <text class="m" x="48" y="210" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">CONTRIBUTIONS</text>
   </g>
   <g class="r" style="animation-delay:0.31s">
     <rect x="270" y="156" width="3" height="48" rx="1.5" fill="#0369A1"/>
-    <text class="s" x="284" y="192" font-size="31" font-weight="800" fill="#1F2328">94</text>
+    <text class="s" x="284" y="192" font-size="31" font-weight="800" fill="#1F2328">95</text>
     <text class="m" x="284" y="210" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">COMMITS</text>
   </g>
   <g class="r" style="animation-delay:0.38s">
     <rect x="34" y="230" width="3" height="48" rx="1.5" fill="#B45309"/>
-    <text class="s" x="48" y="266" font-size="31" font-weight="800" fill="#1F2328">1d</text>
+    <text class="s" x="48" y="266" font-size="31" font-weight="800" fill="#1F2328">2d</text>
     <text class="m" x="48" y="284" font-size="9.5" letter-spacing="1.8" fill="#98A1AB">CURRENT STREAK</text>
   </g>
   <g class="r" style="animation-delay:0.45s">
@@ -76,12 +76,12 @@
   <rect x="548" y="112" width="404" height="11" rx="5.5" fill="#E4E9EF"/>
   <g clip-path="url(#langclip)">
     <g class="g" style="transform-origin:548px 117.5px; animation-delay:.35s">
-      <rect x="548.00" y="112" width="127.54" height="11" fill="#AA6746"/>
-      <rect x="675.04" y="112" width="97.14" height="11" fill="#DA5B0B"/>
-      <rect x="771.68" y="112" width="78.96" height="11" fill="#f1e05a"/>
-      <rect x="850.14" y="112" width="59.82" height="11" fill="#3178c6"/>
-      <rect x="909.46" y="112" width="31.14" height="11" fill="#dea584"/>
-      <rect x="940.10" y="112" width="12.40" height="11" fill="#3572A5"/>
+      <rect x="548.00" y="112" width="127.49" height="11" fill="#AA6746"/>
+      <rect x="674.99" y="112" width="97.11" height="11" fill="#DA5B0B"/>
+      <rect x="771.60" y="112" width="78.93" height="11" fill="#f1e05a"/>
+      <rect x="850.03" y="112" width="59.79" height="11" fill="#3178c6"/>
+      <rect x="909.32" y="112" width="31.29" height="11" fill="#dea584"/>
+      <rect x="940.11" y="112" width="12.39" height="11" fill="#3572A5"/>
     </g>
   </g>
   <g class="r" style="animation-delay:0.42s">
@@ -483,6 +483,7 @@
     <rect x="894.8" y="278.0" width="5.2" height="5.2" rx="1.3" fill="#E7ECF1"/>
     <rect x="894.8" y="284.8" width="5.2" height="5.2" rx="1.3" fill="#E7ECF1"/>
     <rect x="901.6" y="244.0" width="5.2" height="5.2" rx="1.3" fill="#B4E4F0"/>
+    <rect x="901.6" y="250.8" width="5.2" height="5.2" rx="1.3" fill="#B4E4F0"/>
     <text class="m" x="548" y="305.6" font-size="9.5" fill="#98A1AB">less</text>
     <rect x="576.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#E7ECF1"/>
     <rect x="585.0" y="297.6" width="5.2" height="5.2" rx="1.3" fill="#B4E4F0"/>
@@ -493,7 +494,7 @@
   </g>
   <g class="r" style="animation-delay:.80s">
     <circle cx="52" cy="322" r="3.5" fill="#047857"/>
-    <text class="m" x="64" y="326" font-size="10.5" fill="#98A1AB">synced 2026-11-08 &#183; regenerated daily from the github api</text>
+    <text class="m" x="64" y="326" font-size="10.5" fill="#98A1AB">synced 2026-11-09 &#183; regenerated daily from the github api</text>
   </g>
   <rect class="sweep" x="0" y="65" width="200" height="282" fill="url(#sweepg)"/>
 </g>
