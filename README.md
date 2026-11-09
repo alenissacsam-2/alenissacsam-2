@@ -5,6 +5,7 @@
 -->
 
 <picture>
+  <source media="(max-width: 640px)" srcset="assets/generated/passport-narrow.svg" />
   <source media="(prefers-color-scheme: dark)" srcset="assets/generated/passport-uv.svg" />
   <img src="assets/generated/passport-day.svg" width="100%" alt="Passport of Alen Issac Sam. Surname Sam, given names Alen Issac, Indian, resident in Kerala, studying at IIT Hyderabad, working on decentralized identity on Ethereum and Algorand. Valid until disproven. The document number is the SHA-256 of this README." />
 </picture>
@@ -49,6 +50,7 @@ and around them, AI agents, neural nets from first principles, and market-micros
 ## Departures
 
 <a href="https://github.com/alenissacsam-2?tab=repositories"><picture>
+  <source media="(max-width: 640px)" srcset="assets/generated/board-narrow.svg" />
   <source media="(prefers-color-scheme: dark)" srcset="assets/generated/board-uv.svg" />
   <img src="assets/generated/board-day.svg" width="100%" alt="Departures board: my most recently pushed repositories as flights, with the time of the last push, language as the gate, and whether each is boarding, in flight or landed." />
 </picture></a>
@@ -63,6 +65,13 @@ and around them, AI agents, neural nets from first principles, and market-micros
 <a href="https://github.com/alenissacsam-2/txline-prediction-markets"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/generated/visa-5-uv.svg" /><img src="assets/generated/visa-5-day.svg" width="32%" alt="txline-prediction-markets: prediction market interface for on-chain events" /></picture></a>
 <a href="https://github.com/alenissacsam-2/NN-From-Scratch-for-MNIST"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/generated/visa-6-uv.svg" /><img src="assets/generated/visa-6-day.svg" width="32%" alt="NN-From-Scratch-for-MNIST: neural network with backprop by hand" /></picture></a>
 </p>
+
+## Carry-on
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/generated/xray-uv.svg" />
+  <img src="assets/generated/xray-day.svg" width="100%" alt="Carry-on x-ray: a suitcase rides into a baggage scanner and the x-ray shows what I pack: languages sized by how much code I have written in each, the chains I build on, and the tools from my projects." />
+</picture>
 
 ## Entry log
 
@@ -5850,20 +5859,20 @@ facet normal 0 0 1
 outer loop
 vertex 3.1 -4.7 2.6
 vertex 7.5 -11.2 2.6
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 3.1 -4.7 2.6
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 2.6
 vertex 3.4 -4.4 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 3.4 -4.4 0
-vertex 8.3 -10.9 0
+vertex 8.4 -10.9 0
 vertex 7.5 -11.2 0
 endloop
 endfacet
@@ -5877,14 +5886,14 @@ endfacet
 facet normal 0.4 -0.9 0
 outer loop
 vertex 7.5 -11.2 0
-vertex 8.3 -10.9 0
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 0
+vertex 8.4 -10.9 2.6
 endloop
 endfacet
 facet normal 0.4 -0.9 0
 outer loop
 vertex 7.5 -11.2 0
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 2.6
 vertex 7.5 -11.2 2.6
 endloop
 endfacet
@@ -5905,43 +5914,43 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 3.4 -4.4 2.6
-vertex 8.3 -10.9 2.6
-vertex 9.6 -11 2.6
+vertex 8.4 -10.9 2.6
+vertex 9.7 -11 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 3.4 -4.4 2.6
-vertex 9.6 -11 2.6
+vertex 9.7 -11 2.6
 vertex 3.7 -4.2 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 3.7 -4.2 0
-vertex 9.6 -11 0
-vertex 8.3 -10.9 0
+vertex 9.7 -11 0
+vertex 8.4 -10.9 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 3.7 -4.2 0
-vertex 8.3 -10.9 0
+vertex 8.4 -10.9 0
 vertex 3.4 -4.4 0
 endloop
 endfacet
 facet normal -0.1 -1 0
 outer loop
-vertex 8.3 -10.9 0
-vertex 9.6 -11 0
-vertex 9.6 -11 2.6
+vertex 8.4 -10.9 0
+vertex 9.7 -11 0
+vertex 9.7 -11 2.6
 endloop
 endfacet
 facet normal -0.1 -1 0
 outer loop
-vertex 8.3 -10.9 0
-vertex 9.6 -11 2.6
-vertex 8.3 -10.9 2.6
+vertex 8.4 -10.9 0
+vertex 9.7 -11 2.6
+vertex 8.4 -10.9 2.6
 endloop
 endfacet
 facet normal -0.6 0.8 0
@@ -5961,7 +5970,7 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 3.7 -4.2 2.6
-vertex 9.6 -11 2.6
+vertex 9.7 -11 2.6
 vertex 11 -11 2.6
 endloop
 endfacet
@@ -5976,28 +5985,28 @@ facet normal 0 0 -1
 outer loop
 vertex 4 -4 0
 vertex 11 -11 0
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 4 -4 0
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 vertex 3.7 -4.2 0
 endloop
 endfacet
-facet normal 0 -1 0
+facet normal -0 -1 0
 outer loop
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 vertex 11 -11 0
 vertex 11 -11 2.6
 endloop
 endfacet
-facet normal 0 -1 0
+facet normal -0 -1 0
 outer loop
-vertex 9.6 -11 0
+vertex 9.7 -11 0
 vertex 11 -11 2.6
-vertex 9.6 -11 2.6
+vertex 9.7 -11 2.6
 endloop
 endfacet
 facet normal -0.7 0.7 0
@@ -6018,20 +6027,20 @@ facet normal 0 0 1
 outer loop
 vertex 4 -4 2.6
 vertex 11 -11 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.9 -10.4 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 4 -4 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.9 -10.4 2.6
 vertex 4.2 -3.7 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 4.2 -3.7 0
-vertex 11.8 -10.3 0
+vertex 11.9 -10.4 0
 vertex 11 -11 0
 endloop
 endfacet
@@ -6045,14 +6054,14 @@ endfacet
 facet normal 0.6 -0.8 0
 outer loop
 vertex 11 -11 0
-vertex 11.8 -10.3 0
-vertex 11.8 -10.3 2.6
+vertex 11.9 -10.4 0
+vertex 11.9 -10.4 2.6
 endloop
 endfacet
 facet normal 0.6 -0.8 0
 outer loop
 vertex 11 -11 0
-vertex 11.8 -10.3 2.6
+vertex 11.9 -10.4 2.6
 vertex 11 -11 2.6
 endloop
 endfacet
@@ -6073,43 +6082,43 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 4.2 -3.7 2.6
-vertex 11.8 -10.3 2.6
-vertex 11.9 -9.1 2.6
+vertex 11.9 -10.4 2.6
+vertex 11.9 -9.2 2.6
 endloop
 endfacet
 facet normal -0 0 1
 outer loop
 vertex 4.2 -3.7 2.6
-vertex 11.9 -9.1 2.6
+vertex 11.9 -9.2 2.6
 vertex 4.4 -3.4 2.6
 endloop
 endfacet
 facet normal 0 0 -1
 outer loop
 vertex 4.4 -3.4 0
-vertex 11.9 -9.1 0
-vertex 11.8 -10.3 0
+vertex 11.9 -9.2 0
+vertex 11.9 -10.4 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 4.4 -3.4 0
-vertex 11.8 -10.3 0
+vertex 11.9 -10.4 0
 vertex 4.2 -3.7 0
 endloop
 endfacet
-facet normal 1 -0.1 0
+facet normal 1 -0 0
 outer loop
-vertex 11.8 -10.3 0
-vertex 11.9 -9.1 0
-vertex 11.9 -9.1 2.6
+vertex 11.9 -10.4 0
+vertex 11.9 -9.2 0
+vertex 11.9 -9.2 2.6
 endloop
 endfacet
-facet normal 1 -0.1 0
+facet normal 1 -0 0
 outer loop
-vertex 11.8 -10.3 0
-vertex 11.9 -9.1 2.6
-vertex 11.8 -10.3 2.6
+vertex 11.9 -10.4 0
+vertex 11.9 -9.2 2.6
+vertex 11.9 -10.4 2.6
 endloop
 endfacet
 facet normal -0.8 0.6 0
@@ -6129,7 +6138,7 @@ endfacet
 facet normal 0 0 1
 outer loop
 vertex 4.4 -3.4 2.6
-vertex 11.9 -9.1 2.6
+vertex 11.9 -9.2 2.6
 vertex 11.6 -7.8 2.6
 endloop
 endfacet
@@ -6144,28 +6153,28 @@ facet normal 0 0 -1
 outer loop
 vertex 4.7 -3.1 0
 vertex 11.6 -7.8 0
-vertex 11.9 -9.1 0
+vertex 11.9 -9.2 0
 endloop
 endfacet
 facet normal 0 -0 -1
 outer loop
 vertex 4.7 -3.1 0
-vertex 11.9 -9.1 0
+vertex 11.9 -9.2 0
 vertex 4.4 -3.4 0
 endloop
 endfacet
 facet normal 1 0.2 0
 outer loop
-vertex 11.9 -9.1 0
+vertex 11.9 -9.2 0
 vertex 11.6 -7.8 0
 vertex 11.6 -7.8 2.6
 endloop
 endfacet
 facet normal 1 0.2 -0
 outer loop
-vertex 11.9 -9.1 0
+vertex 11.9 -9.2 0
 vertex 11.6 -7.8 2.6
-vertex 11.9 -9.1 2.6
+vertex 11.9 -9.2 2.6
 endloop
 endfacet
 facet normal -0.8 0.6 0

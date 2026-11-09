@@ -171,7 +171,8 @@ def digest(user: dict) -> dict:
         for e in r["languages"]["edges"]:
             if e["node"]["name"] not in LANG_SKIP:
                 totals[e["node"]["name"]] = totals.get(e["node"]["name"], 0) + e["size"]
-    langs = [n for n, _ in sorted(totals.items(), key=lambda kv: -kv[1])][:4]
+    lang_bytes = sorted(totals.items(), key=lambda kv: -kv[1])
+    langs = [n for n, _ in lang_bytes][:4]
 
     cal = user["contributionsCollection"]["contributionCalendar"]
     days = sorted((d for w in cal["weeks"] for d in w["contributionDays"]), key=lambda d: d["date"])
@@ -196,6 +197,7 @@ def digest(user: dict) -> dict:
         "longest": longest,
         "current": current,
         "langs": langs,
+        "lang_bytes": lang_bytes,
         "visas": [(by_name.get(n), n, t, p, s) for n, t, p, s in VISAS],
         "recent": sorted((r for r in repos if r["name"] != USER and r.get("pushedAt")),
                          key=lambda r: r["pushedAt"], reverse=True)[:6],
@@ -585,6 +587,73 @@ def render_passport(d: dict, t: dict, doc_hash: str, portrait: str) -> str:
     return finish("".join(b), W, H, title, PASSPORT_CSS)
 
 
+def render_passport_narrow(d: dict, t: dict, doc_hash: str, portrait: str) -> str:
+    """The same data page laid out for a phone: tall, two columns, type twice the size."""
+    W, H = 720, 1100
+    rng = random.Random(doc_hash)
+    l1, l2 = mrz(doc_hash)
+    doc_no = doc_hash[:9].upper()
+    issued = fmt_date(d["created"])
+    built = dt.datetime.now(dt.timezone.utc).strftime("%d %b %Y").upper()
+
+    def field(x, y, label, value, size=27, delay=1.3, color=None, room=600):
+        while size > 16 and text_len("fw", value, size) > room:
+            size -= 1
+        return (f'<g class="up" style="animation-delay:{delay:.2f}s">'
+                f'<text x="{x}" y="{y}" class="fl" font-size="18" letter-spacing="1.6" fill="{t["label"]}">{esc(label)}</text>'
+                f'<text x="{x}" y="{y + size + 6}" class="fw" font-size="{size}" fill="{color or t["ink"]}">{esc(value)}</text></g>')
+
+    css = (PASSPORT_CSS.replace("transform-origin:20px 380px", "transform-origin:20px 550px")
+           .replace("translateX(1064px)", "translateX(620px)").replace("steps(44,end)", "steps(44,end)"))
+    b = [f"""<defs>
+<clipPath id="doc"><rect x="20" y="20" width="680" height="1060" rx="30"/></clipPath>
+<clipPath id="win"><rect x="50" y="150" width="262" height="338" rx="14"/></clipPath>
+<clipPath id="mrzclip"><rect x="50" y="930" width="620" height="110"/></clipPath>
+<pattern id="wave" width="26" height="9" patternUnits="userSpaceOnUse"><path d="M0 4.5C6.5 0 6.5 0 13 4.5S19.5 9 26 4.5" fill="none" stroke="{t['line']}" stroke-width=".6" opacity=".22"/></pattern>
+<radialGradient id="emboss" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#E9EEF7"/><stop offset=".55" stop-color="#AEB8CC"/><stop offset="1" stop-color="#6C7894"/></radialGradient>
+</defs>"""]
+    b.append(f'<g clip-path="url(#doc)"><rect x="20" y="20" width="680" height="1060" fill="{t["paper"]}"/>'
+             f'<rect x="20" y="20" width="680" height="900" fill="url(#wave)"/>')
+    b.append(f'<g opacity=".55">{rosette(rng, 560, 700, 1.25, "ra", "rb", t["line"], t["line2"], .65, spin=True)}</g>')
+    b.append(f'<g class="up" style="animation-delay:1.15s"><text x="50" y="96" class="fv" font-size="40" letter-spacing="10" fill="{t["ink"]}">PASSPORT</text>'
+             f'<text x="670" y="62" text-anchor="end" class="fl" font-size="16" letter-spacing="1.6" fill="{t["label"]}">DOCUMENT NO.</text>'
+             f'<text x="670" y="98" text-anchor="end" class="fm" font-size="30" fill="{t["red"]}">{doc_no}</text></g>')
+    b.append(f'<text x="50" y="126" class="fm" font-size="4.3" letter-spacing=".4" fill="{t["label"]}" textLength="620" lengthAdjust="spacing">{("DONT TRUST VERIFY " * 24)[:180]}</text>')
+    b.append(f'<g class="up" style="animation-delay:1.25s"><rect x="50" y="150" width="262" height="338" rx="14" fill="{t["paper2"]}"/>'
+             f'<g clip-path="url(#win)"><g fill="{t["portrait"]}" transform="translate(-18 0)">{portrait}</g></g>'
+             f'<rect x="50.5" y="150.5" width="261" height="337" rx="13.5" fill="none" stroke="{t["edge"]}"/></g>')
+    b.append(field(344, 166, "SURNAME", HOLDER["surname"], 54, 1.3, room=320))
+    b.append(field(344, 262, "GIVEN NAMES", HOLDER["given"], 40, 1.36, room=320))
+    b.append(field(344, 350, "NATIONALITY", HOLDER["nationality"], 27, 1.42, room=320))
+    b.append(field(344, 424, "DATE OF ISSUE", issued, 27, 1.46, room=320))
+    b.append(field(50, 530, "RESIDENCE", HOLDER["residence"], 27, 1.5, room=290))
+    b.append(field(370, 530, "INSTITUTION", HOLDER["institution"], 27, 1.54, room=300))
+    b.append(field(50, 612, "FIELD", HOLDER["field"], 27, 1.58))
+    b.append(field(50, 694, "CHAINS", HOLDER["chains"], 27, 1.62))
+    b.append(field(50, 776, "VALID UNTIL", "DISPROVEN", 27, 1.66, color=t["red"], room=290))
+    b.append(field(50, 846, "SIGNATURE", "SIGSTORE / REKOR", 27, 1.7, room=290))
+
+    b.append(f'<rect x="20" y="910" width="680" height="170" fill="{t["paper"]}"/><line x1="50" y1="918" x2="670" y2="918" stroke="{t["edge"]}"/>')
+    b.append(f'<g clip-path="url(#mrzclip)">'
+             f'<text x="50" y="976" class="fm" font-size="25" fill="{t["mrz"]}" textLength="620" lengthAdjust="spacing">{esc(l1)}</text>'
+             f'<text x="50" y="1020" class="fm" font-size="25" fill="{t["mrz"]}" textLength="620" lengthAdjust="spacing">{esc(l2)}</text></g>'
+             f'<rect id="scan" x="48" y="942" width="3" height="88" fill="{t["red"]}" opacity="0"/>'
+             f'<text x="670" y="1058" text-anchor="end" class="fm" font-size="12" fill="{t["label"]}">BUILT {built} / SHA-256 {doc_hash[:24]}</text>')
+    defs, attrs = ink("vs", doc_hash, W, H)
+    b.append(f'<defs>{defs}</defs><g id="stampin"><g transform="rotate(-9 520 800)" {attrs} fill="none" stroke="{t["red"]}" opacity=".88">'
+             f'<rect x="395" y="748" width="250" height="104" rx="12" stroke-width="4.5"/>'
+             f'<rect x="405" y="758" width="230" height="84" rx="7" stroke-width="1.6"/>'
+             f'<text x="520" y="810" text-anchor="middle" class="fv" font-size="38" letter-spacing="4" fill="{t["red"]}" stroke="none">VERIFIED</text>'
+             f'<text x="520" y="833" text-anchor="middle" class="fl" font-size="11" letter-spacing="2.2" fill="{t["red"]}" stroke="none">SIGSTORE / {built[:11]}</text></g></g>')
+    b.append(f'</g><rect x="20.5" y="20.5" width="679" height="1059" rx="29.5" fill="none" stroke="{t["edge"]}"/>')
+    b.append(f'<g id="cover"><rect x="20" y="20" width="680" height="1060" rx="30" fill="{t["cover"]}"/>'
+             f'<g opacity=".95">{rosette(random.Random(doc_hash), 360, 420, 1.3, "ca", "cb", "url(#emboss)", "url(#emboss)", 1.1, (18, 12), 0)}</g>'
+             f'<text x="360" y="700" text-anchor="middle" class="fv" font-size="54" letter-spacing="16" fill="url(#emboss)">PASSPORT</text>'
+             f'<rect id="shade" x="20" y="20" width="680" height="1060" rx="30" fill="#000" opacity="0"/></g>')
+    title = f"Passport of {HOLDER['given'].title()} {HOLDER['surname'].title()}, document {doc_no}. Valid until disproven."
+    return finish("".join(b), W, H, title, css)
+
+
 # ---------------------------------------------------------------- visa stamps
 
 STAMP_CSS = """
@@ -778,19 +847,22 @@ def board_rows(recent: list[dict], now: dt.datetime) -> list[tuple[list[str], st
         lang = (r.get("primaryLanguage") or {}).get("name")
         gate = GATES.get(lang, (lang or "--")[:3].upper())
         flight = "AS " + hashlib.sha256(r["name"].encode()).hexdigest()[:3].upper()
-        rows.append(([pushed.strftime("%H:%M"), flight, fit_words(r["name"], 18), gate, status], status))
+        rows.append(([pushed.strftime("%H:%M"), flight, r["name"], gate, status], status))
     return rows
 
 
-def render_board(d: dict, t: dict) -> str:
+def render_board(d: dict, t: dict, narrow: bool = False) -> str:
     """Recent pushes as a split-flap departures board; every tile flips through letters before it lands."""
     now = dt.datetime.now(dt.timezone.utc)
     rows = board_rows(d["recent"], now)
     uv = t["name"] == "uv"
-    cols = [("TIME", 5), ("FLIGHT", 6), ("DESTINATION", 18), ("GATE", 3), ("REMARKS", 9)]
+    # (header, tiles, index into the row's values); the phone board drops flight and gate
+    cols = ([("TIME", 5, 0), ("DESTINATION", 12, 2), ("REMARKS", 9, 4)] if narrow else
+            [("TIME", 5, 0), ("FLIGHT", 6, 1), ("DESTINATION", 18, 2), ("GATE", 3, 3), ("REMARKS", 9, 4)])
     pitch, tw, th, gap, rh = 24, 22, 40, 16, 54
-    x0, y0 = 76, 118
-    W, H = 1200, y0 + max(len(rows), 1) * rh + 34
+    W = 720 if narrow else 1200
+    x0, y0 = (W - sum(n for _, n, _ in cols) * pitch - gap * (len(cols) - 1)) // 2, 118
+    H = y0 + max(len(rows), 1) * rh + 34
     pal = dict(board="#101B30" if not uv else "#07060F", tile="#1C2B48" if not uv else "#16152E",
                lo="#18263F" if not uv else "#121127", ch="#EEF2F1" if not uv else "#E6E8FF",
                lab="#8FA3B8" if not uv else "#9296CC", amber="#F5B93D" if not uv else "#FFB04A",
@@ -800,9 +872,9 @@ def render_board(d: dict, t: dict) -> str:
     b = [f'<rect width="{W}" height="{H}" rx="26" fill="{pal["board"]}"/>'
          f'<rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="25.5" fill="none" stroke="{t["edge"]}" opacity="{.6 if uv else 0}"/>'
          f'<text x="{x0}" y="62" class="fv" font-size="28" letter-spacing="9" fill="{pal["ch"]}">DEPARTURES</text>'
-         f'<text x="{W - x0}" y="62" text-anchor="end" class="fm" font-size="15" fill="{pal["lab"]}">LAST PUSH, UTC / UPDATED {now.strftime("%H:%M")}</text>']
+         f'<text x="{W - x0}" y="62" text-anchor="end" class="fm" font-size="15" fill="{pal["lab"]}">{"UTC " if narrow else "LAST PUSH, UTC / UPDATED "}{now.strftime("%H:%M")}</text>']
     xs, x = [], x0
-    for name, n in cols:
+    for name, n, _ in cols:
         xs.append(x)
         b.append(f'<text x="{x}" y="100" class="fl" font-size="12.5" letter-spacing="1.6" fill="{pal["lab"]}">{name}</text>')
         x += n * pitch + gap
@@ -812,7 +884,8 @@ def render_board(d: dict, t: dict) -> str:
         clips.append(f'<clipPath id="r{ri}"><rect x="0" y="{top}" width="{W}" height="{th}"/></clipPath>')
         row = [f'<g clip-path="url(#r{ri})">']
         settle = 0
-        for ci, ((_, n), val) in enumerate(zip(cols, vals)):
+        for ci, (name, n, vi) in enumerate(cols):
+            val = fit_words(vals[vi], n) if vi == 2 else vals[vi]
             col_cells = []
             for k in range(n):
                 cx = xs[ci] + k * pitch
@@ -821,7 +894,7 @@ def render_board(d: dict, t: dict) -> str:
                 dl = .25 + ri * .16 + (xs[ci] - x0 + k * pitch) / pitch * .022
                 dur = flips * .065
                 settle = max(settle, dl + dur)
-                fill = tone[status] if ci == 4 else pal["ch"]
+                fill = tone[status] if vi == 4 else pal["ch"]
                 strip = "".join(f'<tspan x="{cx + tw / 2}" y="{top + 29 + j * th}">{rng.choice(FLAPS)}</tspan>' for j in range(1, flips + 1))
                 col_cells.append(
                     f'<rect x="{cx}" y="{top}" width="{tw}" height="{th}" rx="3" fill="{pal["tile"]}"/>'
@@ -831,7 +904,7 @@ def render_board(d: dict, t: dict) -> str:
                     f'<tspan x="{cx + tw / 2}" y="{top + 29}">{esc(ch) if ch != " " else "&#160;"}</tspan>{strip}</text>'
                     f'<rect class="fh" x="{cx}" y="{top}" width="{tw}" height="{th / 2}" fill="#fff" opacity="0" '
                     f'style="animation-duration:.065s;animation-delay:{dl:.2f}s;animation-iteration-count:{flips}"/>')
-            if ci == 4 and status == "BOARDING":
+            if vi == 4 and status == "BOARDING":
                 row.append(f'<g class="bl" style="animation-delay:{settle:.2f}s">{"".join(col_cells)}</g>')
             else:
                 row += col_cells
@@ -841,7 +914,7 @@ def render_board(d: dict, t: dict) -> str:
         cells.append(f'<text x="{x0}" y="{y0 + 30}" class="fm" font-size="22" fill="{pal["lab"]}">NO DEPARTURES TODAY</text>')
     b.insert(0, f"<defs>{''.join(clips)}</defs>")
     b += cells
-    names = ", ".join(f"{v[2].lower()} {s.lower()}" for v, s in rows)
+    names = ", ".join(f"{v[2]} {s.lower()}" for v, s in rows)
     return finish("".join(b), W, H, f"Departures board of recently pushed repositories: {names}.", BOARD_CSS)
 
 
@@ -930,6 +1003,118 @@ def chip_block(portrait: str) -> str:
         "< 90 00",
         "```",
     ])
+
+
+# ---------------------------------------------------------------- carry-on x-ray (the stack)
+
+XRAY_CSS = """
+.mv{animation:mv 14s linear infinite both}
+@keyframes mv{0%{transform:translateX(-860px)}30%,75%{transform:translateX(0)}100%{transform:translateX(860px)}}
+.belt{animation:belt 14s linear infinite both}
+@keyframes belt{0%{stroke-dashoffset:0}30%,75%{stroke-dashoffset:-860}100%{stroke-dashoffset:-1720}}
+.beam{animation:beam 14s cubic-bezier(.45,0,.55,1) infinite both}
+@keyframes beam{0%,32%{transform:translateX(0);opacity:0}34%{opacity:1}70%{transform:translateX(600px);opacity:1}72%,100%{transform:translateX(600px);opacity:0}}
+.scn{animation:scn 14s steps(1,end) infinite both}
+@keyframes scn{0%,29%{opacity:0}30%,74%{opacity:1}75%,100%{opacity:0}}
+.clr{animation:clr 14s steps(1,end) infinite both}
+@keyframes clr{0%,74%{opacity:0}75%,100%{opacity:1}}
+.blk{animation:bl .8s steps(2,jump-none) infinite}
+@keyframes bl{50%{opacity:.2}}
+.cur{transform-box:fill-box;transform-origin:50% 0;animation:cur 14s ease-in-out infinite both}
+@keyframes cur{0%,20%,34%,70%,84%,100%{transform:skewX(0)}26%,78%{transform:skewX(-14deg)}}
+"""
+
+
+def stack_items(d: dict) -> list[tuple[str, str, float]]:
+    """(label, kind, weight): languages by bytes, chains from the passport, tools from the visas."""
+    langs = [(n.upper().replace("JUPYTER NOTEBOOK", "JUPYTER"), "lang", w) for n, w in d["lang_bytes"][:4]]
+    chains = [(c.strip(), "chain", 0) for c in HOLDER["chains"].split("/")]
+    seen = {n for n, _, _ in langs} | {"PYTHON", "TYPESCRIPT", "JAVASCRIPT"}
+    tools = []
+    for _, _, port, stack in VISAS:
+        for x in [p.strip() for p in stack.split("/")] + ([port] if port == "GOOGLE ADK" else []):
+            if x not in seen and x not in {c for c, _, _ in chains}:
+                seen.add(x)
+                tools.append((x, "tool", 0))
+    return langs + chains + tools[:6]
+
+
+def render_xray(d: dict, t: dict) -> str:
+    """The stack as a carry-on bag going through customs: x-ray colours only inside the tunnel."""
+    W, H = 1200, 410
+    uv = t["name"] == "uv"
+    X = dict(bg="#ECEFE8" if not uv else "#07111F",
+             lang=("#E07A1F", "#7A3A06") if not uv else ("#FF9B3D", "#FFD2A1"),
+             chain=("#2F62C9", "#13306E") if not uv else ("#6FA2FF", "#C9DCFF"),
+             tool=("#2E9B5A", "#11502B") if not uv else ("#4FE08A", "#C4F7D8"))
+    tx0, tx1, ty0, ty1 = 300, 900, 64, 318        # tunnel
+    bx0, bw, by0, bh = 340, 520, 96, 214          # bag at rest, centred in the tunnel
+    items = stack_items(d)
+    rows = [items[:4], items[4:8], items[8:12]]
+    rows = [r for r in rows if r]
+    pad, gap, rh = 20, 10, (bh - 2 * 20 - 2 * 10) / 3
+    xr = []
+    for ri, row in enumerate(rows):
+        top = d["lang_bytes"][0][1] if d["lang_bytes"] else 1
+        # languages take room by bytes of code (sqrt, so a small one still fits its name); the rest by label
+        need = [max(text_len("fv", n, 13, 1) + 24, 300 * math.sqrt(w / top) if k == "lang" else 0, 60) for n, k, w in row]
+        scale = (bw - 2 * pad - gap * (len(row) - 1)) / sum(need)
+        x, y = bx0 + pad, by0 + pad + ri * (rh + gap)
+        for (n, k, _), w_ in zip(row, need):
+            w = w_ * scale
+            c, dark = X[k]
+            size = 19
+            while size > 11 and text_len("fv", n, size, 1) > w - 16:
+                size -= .5
+            xr.append(f'<rect x="{f1(x)}" y="{f1(y)}" width="{f1(w)}" height="{f1(rh)}" rx="9" fill="{c}" fill-opacity=".32" stroke="{c}" stroke-width="2"/>'
+                      f'<rect x="{f1(x + 7)}" y="{f1(y + 7)}" width="{f1(w - 14)}" height="{f1(rh - 14)}" rx="5" fill="{c}" fill-opacity=".22"/>'
+                      f'<text x="{f1(x + w / 2)}" y="{f1(y + rh / 2 + size * .36)}" text-anchor="middle" class="fv" font-size="{size}" letter-spacing="1" fill="{dark}">{esc(n)}</text>')
+            x += w + gap
+    # the bag's frame shows faintly in x-ray too: zips, handle rod, wheels
+    frame = (f'<rect x="{bx0}" y="{by0}" width="{bw}" height="{bh}" rx="22" fill="none" stroke="{t["label"]}" stroke-width="2.5" opacity=".55"/>'
+             f'<path d="M{bx0 + 200} {by0}v-26h120v26" fill="none" stroke="{t["label"]}" stroke-width="4" opacity=".55"/>')
+
+    shell = "#24365A" if not uv else "#1D1A3C"
+    bag = (f'<path d="M{bx0 + 200} {by0}v-26h120v26" fill="none" stroke="{t["ink"]}" stroke-width="7" stroke-linejoin="round"/>'
+           f'<rect x="{bx0}" y="{by0}" width="{bw}" height="{bh}" rx="22" fill="{shell}" stroke="{t["ink"]}" stroke-width="2"/>'
+           + "".join(f'<rect x="{bx0 + sx}" y="{by0}" width="16" height="{bh}" fill="{t["line"]}" opacity=".85"/>' for sx in (120, 384))
+           + f'<path d="M{bx0 + 14} {by0 + bh / 2}H{bx0 + bw - 14}" stroke="#000" stroke-opacity=".3" stroke-width="2"/>'
+           f'<g transform="rotate(-8 {bx0 + 470} {by0 + 40})"><rect x="{bx0 + 440}" y="{by0 + 18}" width="64" height="40" rx="6" fill="{t["paper"]}" stroke="{t["ink"]}"/>'
+           f'<text x="{bx0 + 472}" y="{by0 + 45}" text-anchor="middle" class="fv" font-size="17" fill="{t["red"]}">AIS</text></g>')
+
+    b = [f'<defs><clipPath id="tun"><rect x="{tx0}" y="{ty0}" width="{tx1 - tx0}" height="{ty1 - ty0}"/></clipPath>'
+         f'<mask id="out" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}"><rect width="{W}" height="{H}" fill="#fff"/>'
+         f'<rect x="{tx0}" y="{ty0}" width="{tx1 - tx0}" height="{ty1 - ty0}" fill="#000"/></mask>'
+         f'<linearGradient id="bm"><stop offset="0" stop-color="{t["line"]}" stop-opacity="0"/><stop offset=".85" stop-color="{t["line"]}" stop-opacity=".35"/>'
+         f'<stop offset="1" stop-color="{t["line"]}"/></linearGradient></defs>']
+    # belt and rollers, the full width of the image
+    b.append(f'<rect x="20" y="{ty1}" width="{W - 40}" height="16" rx="8" fill="{t["paper2"]}" stroke="{t["edge"]}"/>'
+             f'<path class="belt" d="M28 {ty1 + 8}H{W - 28}" stroke="{t["label"]}" stroke-width="3" stroke-dasharray="10 30" opacity=".6"/>')
+    # the tunnel: x-ray screen with the bag's insides
+    b.append(f'<g clip-path="url(#tun)"><rect x="{tx0}" y="{ty0}" width="{tx1 - tx0}" height="{ty1 - ty0}" fill="{X["bg"]}"/>'
+             f'<g class="mv">{frame}{"".join(xr)}</g>'
+             f'<rect class="beam" x="{tx0 - 60}" y="{ty0}" width="60" height="{ty1 - ty0}" fill="url(#bm)"/></g>')
+    # the bag outside the tunnel
+    b.append(f'<g mask="url(#out)"><g class="mv">{bag}</g></g>')
+    # hood
+    b.append(f'<path d="M{tx0 - 30} {ty1}V{ty0 - 6}a30 30 0 0 1 30-30h{tx1 - tx0}a30 30 0 0 1 30 30V{ty1}" fill="none" stroke="{t["ink"]}" stroke-width="3"/>'
+             f'<rect x="{tx0}" y="{ty0}" width="{tx1 - tx0}" height="{ty1 - ty0}" fill="none" stroke="{t["edge"]}" stroke-width="2"/>')
+    for ex in (tx0, tx1):  # lead curtains at both mouths
+        b.append("".join(f'<rect class="cur" x="{ex - 9 + k * 6}" y="{ty0}" width="5" height="{ty1 - ty0 - 6}" fill="{t["label"]}" opacity=".28" '
+                         f'style="animation-delay:{k * .05:.2f}s"/>' for k in range(3)))
+    b.append(f'<text x="{tx0}" y="22" class="fl" font-size="14.5" letter-spacing="1.4" fill="{t["label"]}">CARRY-ON INSPECTION</text>'
+             f'<g class="scn"><circle class="blk" cx="{tx1 - 150}" cy="17" r="6" fill="{t["red"]}"/>'
+             f'<text x="{tx1 - 136}" y="22" class="fm" font-size="15" fill="{t["red"]}">SCANNING</text></g>'
+             f'<g class="clr"><circle cx="{tx1 - 150}" cy="17" r="6" fill="{X["tool"][0]}"/>'
+             f'<text x="{tx1 - 136}" y="22" class="fm" font-size="15" fill="{X["tool"][0]}">CLEARED</text></g>')
+    # legend: what the x-ray colours mean here
+    lx = 300
+    for k, name in (("lang", "LANGUAGES, SIZED BY CODE"), ("chain", "CHAINS"), ("tool", "TOOLS")):
+        b.append(f'<rect x="{lx}" y="{H - 40}" width="18" height="18" rx="4" fill="{X[k][0]}" fill-opacity=".45" stroke="{X[k][0]}" stroke-width="2"/>'
+                 f'<text x="{lx + 28}" y="{H - 25}" class="fl" font-size="13.5" letter-spacing="1.4" fill="{t["label"]}">{name}</text>')
+        lx += 46 + text_len("fl", name, 13.5, 1.4)
+    names = ", ".join(n.title() for n, _, _ in items)
+    return finish("".join(b), W, H, f"Carry-on x-ray of my stack: {names}.", XRAY_CSS)
 
 
 # ---------------------------------------------------------------- stamped visitors
@@ -1212,6 +1397,11 @@ def build(data: dict) -> None:
         (OUT / f"passport-{t['name']}.svg").write_text(render_passport(d, t, doc_hash, portrait), encoding="utf-8")
         (OUT / f"log-{t['name']}.svg").write_text(render_log(d, t), encoding="utf-8")
         (OUT / f"board-{t['name']}.svg").write_text(render_board(d, t), encoding="utf-8")
+        if t is DAY:
+            (OUT / "passport-narrow.svg").write_text(render_passport_narrow(d, t, doc_hash, portrait), encoding="utf-8")
+        if t is DAY:  # phones get one light board; a dark board reads fine on either theme
+            (OUT / "board-narrow.svg").write_text(render_board(d, t, narrow=True), encoding="utf-8")
+        (OUT / f"xray-{t['name']}.svg").write_text(render_xray(d, t), encoding="utf-8")
         for i, ink_name in enumerate(INKS):
             (OUT / f"pad-{ink_name.lower()}-{t['name']}.svg").write_text(render_pad(i, ink_name, t), encoding="utf-8")
         (OUT / f"registry-{t['name']}.svg").write_text(render_registry(entries, t), encoding="utf-8")
